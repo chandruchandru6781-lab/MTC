@@ -249,8 +249,8 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({ onStartQuiz }) => {
                 <h3 className="font-bold text-gray-800 mb-2">📊 Quiz Summary</h3>
                 <ul className="text-sm text-gray-700 space-y-1">
                   <li>🎯 Teams: {teams.length}</li>
-                  <li>📝 Questions: {questions}</li>
-                  <li>⏱️ Est. Duration: {Math.ceil((questions * 30) / 60)} minutes</li>
+                  <li>📝 Questions: {questions.length}</li>
+                  <li>⏱️ Est. Duration: {Math.ceil((questions.length * 30) / 60)} minutes</li>
                 </ul>
               </motion.div>
             )}
