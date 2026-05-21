@@ -21,7 +21,16 @@ function App() {
   // Load questions on app startup (keep data persistent)
   useEffect(() => {
     console.log('🔄 App.tsx: Loading questions on startup');
-    // Questions persist in Firebase/localStorage - don't clear them
+    const initializeQuestions = async () => {
+      try {
+        const store = useQuizStore.getState();
+        await store.loadQuestions();
+        console.log('✅ Questions loaded successfully');
+      } catch (error) {
+        console.error('❌ Error loading questions:', error);
+      }
+    };
+    initializeQuestions();
   }, []);
 
   // Initialize real-time sync when app loads

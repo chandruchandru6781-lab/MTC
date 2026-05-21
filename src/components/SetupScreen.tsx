@@ -4,7 +4,6 @@ import { Plus, Trash2, Play } from 'lucide-react';
 import { useQuizStore } from '../store/quizStore';
 import { Button, Card, Input, Badge } from './ui';
 import { shuffle } from '../utils/helpers';
-import { quizData } from '../data/quizData';
 
 interface SetupScreenProps {
   onStartQuiz?: () => void;
@@ -17,10 +16,12 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({ onStartQuiz }) => {
     removeTeam,
     setQuestionOrder,
     startQuiz,
+    questions,
+    totalQuestions,
   } = useQuizStore();
 
   const [teamInput, setTeamInput] = useState('');
-  const [questions, setQuestions] = useState(quizData.length);
+  const [selectedQuestions, setSelectedQuestions] = useState(Math.min(totalQuestions, 10));
   const [error, setError] = useState('');
   const [showAdvanced, setShowAdvanced] = useState(false);
 
@@ -43,16 +44,16 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({ onStartQuiz }) => {
       setError('Please add at least one team');
       return;
     }
-    if (questions < 1 || questions > quizData.length) {
-      setError(`Please select between 1 and ${quizData.length} questions`);
+    if (selectedQuestions < 1 || selectedQuestions > totalQuestions) {
+      setError(`Please select between 1 and ${totalQuestions} questions`);
       return;
     }
 
     setError('');
-    const allIndices = Array.from({ length: quizData.length }, (_, i) => i);
-    const shuffledIndices = shuffle(allIndices).slice(0, questions);
+    const allIndices = Array.from({ length: totalQuestions }, (_, i) => i);
+    const shuffledIndices = shuffle(allIndices).slice(0, selectedQuestions);
     setQuestionOrder(shuffledIndices);
-    startQuiz(questions);
+    startQuiz(selectedQuestions);
     onStartQuiz?.();
   };
 
@@ -180,18 +181,18 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({ onStartQuiz }) => {
                   <label className="font-semibold text-gray-700">
                     Number of Questions
                   </label>
-                  <Badge variant="primary">{questions}</Badge>
+                  <Badge variant="primary">{selectedQuestions}</Badge>
                 </div>
                 <input
                   type="range"
                   min="1"
-                  max={quizData.length}
-                  value={questions}
-                  onChange={(e) => setQuestions(parseInt(e.target.value))}
+                  max={totalQuestions}
+                  value={selectedQuestions}
+                  onChange={(e) => setSelectedQuestions(parseInt(e.target.value))}
                   className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
                 />
                 <p className="text-sm text-gray-600 mt-2">
-                  Out of {quizData.length} total questions available
+                  Out of <strong>{totalQuestions}</strong> total questions available
                 </p>
               </div>
             </div>
