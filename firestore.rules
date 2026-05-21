@@ -1,0 +1,17 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Quiz Questions - Allow read/write for all users (development mode)
+    // In production, add: request.auth != null for authentication requirement
+    match /quiz_questions/{document=**} {
+      allow read: if true;
+      allow write: if true;
+    }
+    
+    // Quiz Sessions - Allow read/write for all users (development mode)
+    match /quiz_sessions/{document=**} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}
