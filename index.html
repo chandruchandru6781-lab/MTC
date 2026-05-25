@@ -837,6 +837,103 @@
             box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
         }
 
+        /* Video Modal */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 3500;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .video-modal.active {
+            display: flex;
+        }
+
+        .video-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-modal-header {
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            margin: -30px -30px 20px -30px;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .video-modal-header h3 {
+            margin: 0;
+            font-size: 20px;
+            font-family: 'TAU-Marutham', sans-serif;
+        }
+
+        .video-container {
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background: #f0f0f0;
+            aspect-ratio: 16/9;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .video-modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .video-play-btn, .video-skip-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: 'TAU-Marutham', sans-serif;
+        }
+
+        .video-play-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .video-play-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .video-skip-btn {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .video-skip-btn:hover {
+            background: #d0d0d0;
+            transform: translateY(-2px);
+        }
+
         /* Running Text Modal */
         .running-text-modal {
             display: none;
@@ -3780,6 +3877,13 @@
         let questionOrder = []; // Array to store shuffled question indices
         let answeredQuestionsHistory = []; // Store answer history for review
         let currentReviewIndex = 0; // Current review question index
+        
+        // Video Modal Variables
+        let availableVideos = [
+            'Videos/Bus first.mp4'
+        ];
+        let lastVideoCheckCount = 0;
+        let videoCheckEnabled = true;
 
         // Function to initialize scroll indicators
         function initializeScrollIndicators() {
@@ -4075,6 +4179,10 @@
             answeredQuestions.clear();
             answeredQuestionsHistory = [];
             selectedTeam = null;
+            
+            // Initialize video tracking
+            lastVideoCheckCount = 0;
+            videoCheckEnabled = true;
 
             document.getElementById('setupScreen').style.display = 'none';
             document.getElementById('quizScreen').classList.add('active');
@@ -4244,6 +4352,34 @@
         }
 
         function goToNextQuestion() {
+            // Check if 5 questions have been answered and show video
+            const answeredCount = answeredQuestions.size;
+            
+            // If exactly at 5, 10, 15, 20 etc questions answered
+            if (answeredCount > 0 && answeredCount % 5 === 0 && answeredCount !== lastVideoCheckCount) {
+                lastVideoCheckCount = answeredCount;
+                const randomVideo = getRandomVideo();
+                
+                if (randomVideo) {
+                    // Show video modal
+                    document.getElementById('videoSource').src = randomVideo;
+                    const videoPlayer = document.getElementById('videoPlayer');
+                    if (videoPlayer) {
+                        videoPlayer.load();
+                    }
+                    document.getElementById('videoModal').classList.add('active');
+                    
+                    // Mark that we need to advance after video
+                    window.pendingQuestionAdvance = true;
+                    return;
+                }
+            }
+            
+            // No video to show, advance normally
+            advanceToNextQuestion();
+        }
+
+        function advanceToNextQuestion() {
             // Stop any playing celebration audio
             if (celebrationAudioContext) {
                 celebrationAudioContext.close();
@@ -5032,6 +5168,88 @@
             });
         }
 
+        // Video Modal Functions
+        function getRandomVideo() {
+            if (availableVideos.length === 0) {
+                return null;
+            }
+            const randomIndex = Math.floor(Math.random() * availableVideos.length);
+            return availableVideos[randomIndex];
+        }
+
+        function playVideoNow() {
+            const videoPlayer = document.getElementById('videoPlayer');
+            if (!videoPlayer) {
+                console.error('Video player not found');
+                return;
+            }
+            
+            // Remove previous event listeners to avoid duplicates
+            const newPlayer = videoPlayer.cloneNode(true);
+            videoPlayer.parentNode.replaceChild(newPlayer, videoPlayer);
+            
+            const updatedPlayer = document.getElementById('videoPlayer');
+            
+            // Attempt to play
+            const playPromise = updatedPlayer.play();
+            
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        console.log('Video playing');
+                    })
+                    .catch(err => {
+                        console.error('Play error:', err);
+                        // If autoplay fails, show message and allow skip
+                        console.log('Video autoplay failed. User can still click play on video controls.');
+                    });
+            }
+            
+            // Setup end listener
+            updatedPlayer.addEventListener('ended', function() {
+                proceedAfterVideo();
+            }, { once: true });
+        }
+
+        function skipVideoForNow() {
+            // Skip video and proceed to next question
+            proceedAfterVideo();
+        }
+
+        function proceedAfterVideo() {
+            // Close the video modal
+            const modal = document.getElementById('videoModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+            
+            // Stop video
+            const videoPlayer = document.getElementById('videoPlayer');
+            if (videoPlayer) {
+                videoPlayer.pause();
+                videoPlayer.currentTime = 0;
+            }
+            
+            // Advance to next question
+            if (window.pendingQuestionAdvance) {
+                window.pendingQuestionAdvance = false;
+                advanceToNextQuestion();
+            }
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+            
+            const videoPlayer = document.getElementById('videoPlayer');
+            if (videoPlayer) {
+                videoPlayer.pause();
+                videoPlayer.currentTime = 0;
+            }
+        }
+
         // Running Text Modal Functions
         function openRunningTextModal() {
             const modal = document.getElementById('runningTextModal');
@@ -5291,6 +5509,25 @@
         <div class="message-modal-content">
             <div class="message-modal-text" id="messageModalText">Operation completed successfully!</div>
             <button class="message-modal-btn" id="messageModalBtn">OK</button>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="video-modal">
+        <div class="video-modal-content">
+            <div class="video-modal-header">
+                <h3>🎬 Great Progress! Watch a Video</h3>
+            </div>
+            <div class="video-container">
+                <video id="videoPlayer" controls>
+                    <source id="videoSource" src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="video-modal-buttons">
+                <button class="video-play-btn" onclick="playVideoNow()">▶️ Play Now</button>
+                <button class="video-skip-btn" onclick="skipVideoForNow()">⏭️ Skip for Now</button>
+            </div>
         </div>
     </div>
 
