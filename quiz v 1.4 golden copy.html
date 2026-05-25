@@ -4521,6 +4521,16 @@
             selectedTeam = null;
             answeredQuestions.clear();
             answeredQuestionsHistory = [];
+            totalQuestionsToAsk = 66;
+
+            // Clear all UI selections
+            document.querySelectorAll('.team-count-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('numQuestions').value = '';
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('teamNamesContainer').style.display = 'none';
+            document.getElementById('setupWarningMessage').style.display = 'none';
+            document.getElementById('teamInputs').innerHTML = '';
+            questionOrder = [];
         }
 
         function restartQuiz() {
