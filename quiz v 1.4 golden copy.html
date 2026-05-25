@@ -1656,12 +1656,13 @@
             background: white;
             border-radius: 20px;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
+            max-width: 800px;
             width: 90%;
             padding: 0;
             position: relative;
             display: flex;
             flex-direction: column;
+            max-height: 80vh;
         }
 
         .theme-modal-header {
@@ -1684,22 +1685,27 @@
         .theme-modal-body {
             padding: 30px 40px;
             overflow-y: auto;
-            max-height: 400px;
+            max-height: 50vh;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .theme-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
             gap: 15px;
+            width: 100%;
+            align-content: start;
         }
 
         .theme-option {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             cursor: pointer;
-            padding: 15px;
+            padding: 10px;
             border: 3px solid #e2e8f0;
             border-radius: 12px;
             transition: all 0.3s ease;
@@ -1719,8 +1725,8 @@
         }
 
         .theme-color-preview {
-            width: 80px;
-            height: 60px;
+            width: 60px;
+            height: 50px;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
@@ -1728,7 +1734,7 @@
         .theme-name {
             font-weight: 600;
             color: #333;
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .theme-modal-footer {
@@ -1822,6 +1828,78 @@
 
         body.theme-coral {
             background: linear-gradient(135deg, #ff3b30 0%, #ff6b6b 50%, #ffa348 100%);
+        }
+
+        body.theme-sunset {
+            background: linear-gradient(135deg, #ff6b35 0%, #ffa348 50%, #ffb84d 100%);
+        }
+
+        body.theme-mint {
+            background: linear-gradient(135deg, #00d4aa 0%, #7fdbca 50%, #a8e6d8 100%);
+        }
+
+        body.theme-rosegold {
+            background: linear-gradient(135deg, #c5166a 0%, #f4a261 50%, #e8b4a0 100%);
+        }
+
+        body.theme-midnight {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1a2940 100%);
+        }
+
+        body.theme-emerald {
+            background: linear-gradient(135deg, #13541b 0%, #1faa00 50%, #2dbf1f 100%);
+        }
+
+        body.theme-lavender {
+            background: linear-gradient(135deg, #b19cd9 0%, #dda0dd 50%, #ee82ee 100%);
+        }
+
+        body.theme-oceansunset {
+            background: linear-gradient(135deg, #1a5276 0%, #e67e22 50%, #f39c12 100%);
+        }
+
+        body.theme-forestmoss {
+            background: linear-gradient(135deg, #2d5016 0%, #6ba82f 50%, #8bc34a 100%);
+        }
+
+        body.theme-crimson {
+            background: linear-gradient(135deg, #c41e3a 0%, #ff6b6b 50%, #ff8888 100%);
+        }
+
+        body.theme-goldenhour {
+            background: linear-gradient(135deg, #ffd700 0%, #ffa500 50%, #ffb84d 100%);
+        }
+
+        body.theme-berryblast {
+            background: linear-gradient(135deg, #c13584 0%, #e1306c 50%, #f64a8a 100%);
+        }
+
+        body.theme-arctic {
+            background: linear-gradient(135deg, #e0f2f1 0%, #80deea 50%, #4dd0e1 100%);
+        }
+
+        body.theme-sunfire {
+            background: linear-gradient(135deg, #ff5722 0%, #ffeb3b 50%, #ffc107 100%);
+        }
+
+        body.theme-neon {
+            background: linear-gradient(135deg, #00ff00 0%, #ff00ff 50%, #00ffff 100%);
+        }
+
+        body.theme-peacock {
+            background: linear-gradient(135deg, #1abc9c 0%, #3498db 50%, #2980b9 100%);
+        }
+
+        body.theme-plum {
+            background: linear-gradient(135deg, #663399 0%, #9932cc 50%, #ba55d3 100%);
+        }
+
+        body.theme-sepia {
+            background: linear-gradient(135deg, #704214 0%, #a0826d 50%, #c5a572 100%);
+        }
+
+        body.theme-tropics {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06c84 50%, #d98880 100%);
         }
 
         /* Cracker Animation */
@@ -4584,26 +4662,58 @@
             { id: 'cyan', name: 'Cyan Sky', gradient: 'linear-gradient(135deg, #0099f7 0%, #f11712 100%)' },
             { id: 'teal', name: 'Teal Green', gradient: 'linear-gradient(135deg, #0d4f5c 0%, #1b9b9e 100%)' },
             { id: 'indigo', name: 'Deep Indigo', gradient: 'linear-gradient(135deg, #1a237e 0%, #3f51b5 100%)' },
-            { id: 'coral', name: 'Coral Reef', gradient: 'linear-gradient(135deg, #ff6b6b 0%, #ffa348 100%)' }
+            { id: 'coral', name: 'Coral Reef', gradient: 'linear-gradient(135deg, #ff6b6b 0%, #ffa348 100%)' },
+            { id: 'sunset', name: 'Sunset Blaze', gradient: 'linear-gradient(135deg, #ff6b35 0%, #ffa348 100%)' },
+            { id: 'mint', name: 'Mint Fresh', gradient: 'linear-gradient(135deg, #00d4aa 0%, #7fdbca 100%)' },
+            { id: 'rosegold', name: 'Rose Gold', gradient: 'linear-gradient(135deg, #c5166a 0%, #f4a261 100%)' },
+            { id: 'midnight', name: 'Midnight Blue', gradient: 'linear-gradient(135deg, #0f3460 0%, #16213e 100%)' },
+            { id: 'emerald', name: 'Emerald', gradient: 'linear-gradient(135deg, #13541b 0%, #1faa00 100%)' },
+            { id: 'lavender', name: 'Lavender Dreams', gradient: 'linear-gradient(135deg, #b19cd9 0%, #dda0dd 100%)' },
+            { id: 'oceansunset', name: 'Ocean Sunset', gradient: 'linear-gradient(135deg, #1a5276 0%, #e67e22 100%)' },
+            { id: 'forestmoss', name: 'Forest Moss', gradient: 'linear-gradient(135deg, #2d5016 0%, #6ba82f 100%)' },
+            { id: 'crimson', name: 'Crimson Red', gradient: 'linear-gradient(135deg, #c41e3a 0%, #ff6b6b 100%)' },
+            { id: 'goldenhour', name: 'Golden Hour', gradient: 'linear-gradient(135deg, #ffd700 0%, #ffa500 100%)' },
+            { id: 'berryblast', name: 'Berry Blast', gradient: 'linear-gradient(135deg, #c13584 0%, #e1306c 100%)' },
+            { id: 'arctic', name: 'Arctic Ice', gradient: 'linear-gradient(135deg, #e0f2f1 0%, #80deea 100%)' },
+            { id: 'sunfire', name: 'Sun Fire', gradient: 'linear-gradient(135deg, #ff5722 0%, #ffeb3b 100%)' },
+            { id: 'neon', name: 'Neon Nights', gradient: 'linear-gradient(135deg, #00ff00 0%, #ff00ff 100%)' },
+            { id: 'peacock', name: 'Peacock', gradient: 'linear-gradient(135deg, #1abc9c 0%, #3498db 100%)' },
+            { id: 'plum', name: 'Plum Velvet', gradient: 'linear-gradient(135deg, #663399 0%, #9932cc 100%)' },
+            { id: 'sepia', name: 'Sepia Tone', gradient: 'linear-gradient(135deg, #704214 0%, #a0826d 100%)' },
+            { id: 'tropics', name: 'Tropics', gradient: 'linear-gradient(135deg, #ff6b9d 0%, #c06c84 100%)' }
         ];
 
         function initializeThemeSelector() {
-            const themeGrid = document.getElementById('themeGrid');
-            themeGrid.innerHTML = '';
+            try {
+                const themeGrid = document.getElementById('themeGrid');
+                if (!themeGrid) {
+                    console.error('Theme grid not found');
+                    return;
+                }
+                
+                themeGrid.innerHTML = '';
 
-            themes.forEach(theme => {
-                const option = document.createElement('div');
-                option.className = 'theme-option' + (selectedThemeId === theme.id ? ' active' : '');
-                option.innerHTML = `
-                    <div class="theme-color-preview" style="background: ${theme.gradient}"></div>
-                    <div class="theme-name">${theme.name}</div>
-                `;
-                option.addEventListener('click', () => {
-                    selectedThemeId = theme.id;
-                    initializeThemeSelector();
+                if (!Array.isArray(themes)) {
+                    console.error('Themes array not found or not an array');
+                    return;
+                }
+
+                themes.forEach(theme => {
+                    const option = document.createElement('div');
+                    option.className = 'theme-option' + (selectedThemeId === theme.id ? ' active' : '');
+                    option.innerHTML = `
+                        <div class="theme-color-preview" style="background: ${theme.gradient}"></div>
+                        <div class="theme-name">${theme.name}</div>
+                    `;
+                    option.addEventListener('click', () => {
+                        selectedThemeId = theme.id;
+                        initializeThemeSelector();
+                    });
+                    themeGrid.appendChild(option);
                 });
-                themeGrid.appendChild(option);
-            });
+            } catch (error) {
+                console.error('Error initializing theme selector:', error);
+            }
         }
 
         function applySelectedTheme() {
@@ -4637,7 +4747,9 @@
 
         function openThemeModal() {
             document.getElementById('themeModal').classList.add('active');
-            initializeThemeSelector();
+            setTimeout(() => {
+                initializeThemeSelector();
+            }, 100);
         }
 
         function closeThemeModal() {
