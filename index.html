@@ -4153,7 +4153,7 @@
             
             // Validate that user has entered a number
             if (!numQuestionsInput) {
-                setupWarningMessage.textContent = 'Please enter the number of questions (1-66)';
+                setupWarningMessage.textContent = 'Please enter the number of questions';
                 setupWarningMessage.style.display = 'block';
                 return;
             }
@@ -4162,7 +4162,7 @@
             
             // Validate input range
             if (totalQuestionsToAsk < 1 || totalQuestionsToAsk > 66) {
-                setupWarningMessage.textContent = 'Please enter a number between 1 and 66';
+                setupWarningMessage.textContent = 'Please enter a valid number of questions';
                 setupWarningMessage.style.display = 'block';
                 return;
             }
