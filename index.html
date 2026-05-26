@@ -3998,12 +3998,6 @@
             }
         });
 
-        // Load saved theme on page load
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('selectedTheme') || 'default';
-            applyTheme(savedTheme);
-        });
-
         // PowerPoint Presenter Remote Control Support
         document.addEventListener('keydown', (event) => {
             // Don't trigger if user is typing in an input field
@@ -4073,51 +4067,6 @@
             }
         });
 
-        function switchTab(tabName) {
-                        container._idleTimer = idleTimer;
-                    }
-                    
-                    // Update indicators on scroll
-                    const updateIndicators = function() {
-                        // Throttle scroll events to prevent excessive updates
-                        if (scrollThrottleTimer) return;
-                        
-                        scrollThrottleTimer = setTimeout(() => {
-                            scrollThrottleTimer = null;
-                        }, SCROLL_THROTTLE);
-                        container._scrollThrottleTimer = scrollThrottleTimer;
-                        
-                        // Get current scroll position state
-                        const scrollState = getScrollState();
-                        
-                        // Show indicator based on current scroll position
-                        // This will immediately change if scroll position changes
-                        showIndicatorBasedOnPosition(scrollState);
-                        
-                        lastScrollPosition = this.scrollTop;
-                        
-                        // Reset idle timer on scroll
-                        resetIdleTimer();
-                    };
-                    
-                    // Remove old scroll listener if exists
-                    container.removeEventListener('scroll', container._scrollHandler || updateIndicators);
-                    container._scrollHandler = updateIndicators;
-                    container.addEventListener('scroll', updateIndicators);
-                    
-                    // Initial state - check scroll position and show appropriate indicator
-                    topIndicator.classList.add('hidden');
-                    bottomIndicator.classList.add('hidden');
-                    
-                    const initialScrollState = getScrollState();
-                    if (initialScrollState === 'bottom') {
-                        bottomIndicator.innerHTML = '⬆ Scroll Up';
-                        showIndicatorBasedOnPosition('bottom');
-                    } else if (initialScrollState === 'top') {
-                        topIndicator.innerHTML = '⬇ Scroll Down';
-                        showIndicatorBasedOnPosition('top');
-                    }
-                    
         function switchTab(tabName) {
             // Hide all tab contents
             document.querySelectorAll('.settings-tab-content').forEach(tab => {
