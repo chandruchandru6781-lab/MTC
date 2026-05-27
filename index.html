@@ -5388,11 +5388,17 @@
         }
 
         function backToVideoGallery() {
-            // Prevent auto-advance to next question
-            window.pendingQuestionAdvance = false;
+            // Close the gallery video modal
+            const modal = document.getElementById('galleryVideoModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
             
-            // Close the video modal
-            closeVideoModal();
+            const videoPlayer = document.getElementById('galleryVideoPlayer');
+            if (videoPlayer) {
+                videoPlayer.pause();
+                videoPlayer.currentTime = 0;
+            }
             
             // Open the video gallery
             openVideoGallery();
@@ -5508,16 +5514,16 @@
             // Close gallery
             closeVideoGallery();
             
-            // Open video modal with selected video
-            const videoSource = document.getElementById('videoSource');
+            // Open gallery video modal with selected video
+            const videoSource = document.getElementById('galleryVideoSource');
             videoSource.src = videoSrc;
             
-            const videoPlayer = document.getElementById('videoPlayer');
+            const videoPlayer = document.getElementById('galleryVideoPlayer');
             if (videoPlayer) {
                 videoPlayer.load();
             }
             
-            const videoModal = document.getElementById('videoModal');
+            const videoModal = document.getElementById('galleryVideoModal');
             videoModal.classList.add('active');
             
             // Auto-play
@@ -5531,6 +5537,33 @@
                     });
                 }
             }, 500);
+        }
+
+        function playGalleryVideoNow() {
+            const videoPlayer = document.getElementById('galleryVideoPlayer');
+            if (!videoPlayer) {
+                console.error('Gallery video player not found');
+                return;
+            }
+            
+            // Remove previous event listeners to avoid duplicates
+            const newPlayer = videoPlayer.cloneNode(true);
+            videoPlayer.parentNode.replaceChild(newPlayer, videoPlayer);
+            
+            const updatedPlayer = document.getElementById('galleryVideoPlayer');
+            
+            // Attempt to play
+            const playPromise = updatedPlayer.play();
+            
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        console.log('Gallery video playing');
+                    })
+                    .catch(err => {
+                        console.error('Play error:', err);
+                    });
+            }
         }
 
         // Running Text Modal Functions
@@ -5795,7 +5828,7 @@
         </div>
     </div>
 
-    <!-- Video Modal -->
+    <!-- Auto-triggered Video Modal (Every 5 Questions) -->
     <div id="videoModal" class="video-modal">
         <div class="video-modal-content">
             <div class="video-modal-header">
@@ -5809,6 +5842,25 @@
             </div>
             <div class="video-modal-buttons">
                 <button class="video-play-btn" onclick="playVideoNow()">▶️ Play Now</button>
+                <button class="video-skip-btn" onclick="skipVideoForNow()">⏭️ Skip for Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Video Modal (From Video Gallery) -->
+    <div id="galleryVideoModal" class="video-modal">
+        <div class="video-modal-content">
+            <div class="video-modal-header">
+                <h3>🎬 Video Player</h3>
+            </div>
+            <div class="video-container">
+                <video id="galleryVideoPlayer" controls>
+                    <source id="galleryVideoSource" src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="video-modal-buttons">
+                <button class="video-play-btn" onclick="playGalleryVideoNow()">▶️ Play Now</button>
                 <button class="video-skip-btn" onclick="backToVideoGallery()">📂 Back to Gallery</button>
             </div>
         </div>
