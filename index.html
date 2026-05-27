@@ -132,12 +132,14 @@
 
         .team-count-buttons {
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 12px;
         }
 
         .team-count-btn {
-            flex: 1;
+            flex: 1 1 calc(50% - 5px);
+            min-width: 100px;
             padding: 12px;
             border: 2px solid #cbd5e1;
             background: white;
@@ -3339,6 +3341,45 @@
             }
         }
 
+        /* Tablet Responsive */
+        @media (max-width: 768px) and (min-width: 481px) {
+            #setupScreen {
+                padding: 18px;
+                border-radius: 15px;
+            }
+
+            .setup-header {
+                padding: 15px;
+                margin: -18px -18px 15px -18px;
+            }
+
+            .setup-title {
+                font-size: 22px;
+            }
+
+            .team-count-buttons {
+                gap: 8px;
+            }
+
+            .team-count-btn {
+                flex: 1 1 calc(33.33% - 6px);
+                min-width: 90px;
+                padding: 10px 6px;
+                font-size: 13px;
+            }
+
+            .settings-btn-container {
+                gap: 10px;
+                top: 15px;
+                right: 15px;
+            }
+
+            .settings-btn {
+                padding: 10px 14px;
+                font-size: 12px;
+            }
+        }
+
         /* Landscape Orientation Adjustments */
         @media (orientation: landscape) and (max-height: 600px) {
             #setupScreen {
@@ -3356,9 +3397,12 @@
 
             .team-count-buttons {
                 gap: 8px;
+                flex-wrap: wrap;
             }
 
             .team-count-btn {
+                flex: 1 1 calc(33.33% - 6px);
+                min-width: 60px;
                 padding: 8px;
                 font-size: 13px;
             }
@@ -3368,6 +3412,66 @@
         @media (max-width: 600px) {
             html {
                 font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #setupScreen {
+                padding: 15px;
+            }
+
+            .setup-header {
+                padding: 12px;
+                margin: -15px -15px 12px -15px;
+            }
+
+            .setup-title {
+                font-size: 18px;
+            }
+
+            .setup-label {
+                font-size: 13px;
+                margin-bottom: 8px;
+            }
+
+            .team-count-buttons {
+                gap: 6px;
+                flex-wrap: wrap;
+            }
+
+            .team-count-btn {
+                flex: 1 1 calc(50% - 3px);
+                min-width: 70px;
+                padding: 8px 4px;
+                font-size: 12px;
+            }
+
+            .questions-input {
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+
+            .start-btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            .settings-btn-container {
+                position: fixed;
+                top: 8px;
+                right: 8px;
+                gap: 6px;
+                flex-wrap: wrap;
+                max-width: 180px;
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .settings-btn {
+                padding: 8px 10px;
+                font-size: 11px;
+                white-space: nowrap;
+                height: auto;
             }
         }
 
@@ -3387,6 +3491,871 @@
             html {
                 font-size: 17px;
             }
+        }
+
+        /* ============================================
+           COMPREHENSIVE RESPONSIVE DESIGN
+           ============================================ */
+
+        /* Extra Small Devices: 320px - 480px (Mobile Phones) */
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+
+            /* Setup Screen */
+            #setupScreen {
+                padding: 12px;
+                max-width: 100%;
+                border-radius: 12px;
+            }
+
+            .setup-header {
+                padding: 10px;
+                margin: -12px -12px 10px -12px;
+                border-radius: 12px 12px 0 0;
+            }
+
+            .setup-title {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+
+            .setup-label {
+                font-size: 12px;
+            }
+
+            .team-count-buttons {
+                gap: 4px;
+            }
+
+            .team-count-btn {
+                flex: 1 1 calc(50% - 2px);
+                min-width: 60px;
+                padding: 6px 2px;
+                font-size: 11px;
+            }
+
+            .team-name-input {
+                padding: 8px 10px;
+                font-size: 13px;
+                margin-bottom: 6px;
+            }
+
+            .questions-input {
+                padding: 8px 10px;
+                font-size: 13px;
+                margin-bottom: 8px;
+            }
+
+            .start-btn {
+                padding: 10px;
+                font-size: 13px;
+            }
+
+            /* Settings Buttons */
+            .settings-btn-container {
+                position: fixed;
+                top: 5px;
+                right: 5px;
+                gap: 4px;
+                flex-wrap: wrap;
+                max-width: calc(100% - 10px);
+                justify-content: flex-end;
+            }
+
+            .settings-btn {
+                padding: 6px 8px;
+                font-size: 10px;
+                white-space: nowrap;
+                border-radius: 8px;
+                height: auto;
+                line-height: 1.2;
+            }
+
+            /* Modals */
+            .settings-modal-content,
+            .edit-modal-content,
+            .add-question-modal-content,
+            .running-text-modal-content,
+            .video-modal-content,
+            .video-gallery-modal-content {
+                width: 95%;
+                max-width: 100%;
+                max-height: 95vh;
+                border-radius: 12px;
+                padding: 12px;
+            }
+
+            .settings-modal-header,
+            .running-text-modal-header,
+            .video-gallery-header {
+                padding: 10px 12px;
+                font-size: 14px;
+                margin: -12px -12px 10px -12px;
+                border-radius: 12px 12px 0 0;
+            }
+
+            .settings-modal-header h2,
+            .running-text-modal-header h2,
+            .video-gallery-header h2 {
+                font-size: 16px;
+            }
+
+            .settings-modal-body,
+            .running-text-modal-body {
+                padding: 12px;
+            }
+
+            .settings-tabs {
+                padding: 0 12px;
+                gap: 5px;
+            }
+
+            .settings-tab-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            /* Form Elements */
+            .form-group label,
+            .add-question-modal .form-group label {
+                font-size: 13px;
+            }
+
+            .form-group input,
+            .form-group textarea,
+            .add-question-modal .form-group input,
+            .add-question-modal .form-group textarea {
+                padding: 10px 10px;
+                font-size: 13px;
+                border-radius: 8px;
+            }
+
+            /* Options Grid */
+            .options-inputs {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            /* Buttons */
+            .form-buttons button,
+            .add-question-modal .form-buttons button {
+                padding: 10px;
+                font-size: 12px;
+            }
+
+            /* Video Gallery */
+            .video-gallery-body {
+                padding: 12px;
+            }
+
+            .video-gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 12px;
+            }
+
+            .video-gallery-thumbnail,
+            .video-gallery-canvas {
+                height: 90px;
+            }
+
+            /* Close Buttons */
+            .close-modal-btn,
+            .running-text-modal-close,
+            .video-gallery-close-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 18px;
+            }
+
+            /* Confirm/Message Modals */
+            .confirm-modal-content,
+            .message-modal-content {
+                padding: 20px 16px;
+                width: 90%;
+            }
+
+            .confirm-modal-title {
+                font-size: 16px;
+            }
+
+            .confirm-modal-message,
+            .message-modal-text {
+                font-size: 13px;
+            }
+
+            /* Quiz Screen */
+            #quizScreen {
+                padding: 8px;
+            }
+
+            .quiz-header {
+                padding: 10px;
+            }
+
+            .quiz-org-name {
+                font-size: 14px;
+            }
+
+            .quiz-org-subtitle {
+                font-size: 11px;
+            }
+
+            .quiz-container {
+                flex-direction: column;
+                padding: 0;
+            }
+
+            .scoreboard-panel {
+                width: 100%;
+                border-radius: 0;
+                padding: 10px;
+                min-height: auto;
+                gap: 6px;
+            }
+
+            .team-score {
+                padding: 8px;
+                font-size: 11px;
+            }
+
+            .main-content {
+                padding: 12px;
+            }
+
+            .question-text {
+                font-size: 14px;
+                margin-bottom: 12px;
+            }
+
+            .question-number {
+                font-size: 12px;
+            }
+
+            .team-selector {
+                gap: 4px;
+            }
+
+            .team-choice {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .options-container {
+                gap: 8px;
+            }
+
+            .option {
+                padding: 10px;
+                font-size: 13px;
+            }
+
+            .next-btn {
+                padding: 10px;
+                font-size: 13px;
+            }
+
+            .quiz-back-btn,
+            .quiz-home-btn {
+                padding: 8px 10px;
+                font-size: 11px;
+            }
+
+            /* Review Modal */
+            .review-modal-content {
+                max-width: 95%;
+                width: 100%;
+                padding: 12px;
+                border-radius: 12px;
+            }
+
+            .review-modal-header {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+
+            .review-modal-body {
+                padding: 12px;
+            }
+
+            .review-question-text {
+                font-size: 13px;
+            }
+
+            .review-nav-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+        }
+
+        /* Small Devices: 481px - 600px */
+        @media (min-width: 481px) and (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            #setupScreen {
+                padding: 14px;
+                border-radius: 14px;
+            }
+
+            .setup-header {
+                padding: 12px;
+                margin: -14px -14px 12px -14px;
+            }
+
+            .setup-title {
+                font-size: 18px;
+                margin-bottom: 12px;
+            }
+
+            .team-count-buttons {
+                gap: 6px;
+            }
+
+            .team-count-btn {
+                flex: 1 1 calc(50% - 3px);
+                min-width: 80px;
+                padding: 8px 4px;
+                font-size: 12px;
+            }
+
+            .settings-btn-container {
+                top: 8px;
+                right: 8px;
+                gap: 6px;
+            }
+
+            .settings-btn {
+                padding: 8px 10px;
+                font-size: 11px;
+            }
+
+            .settings-modal-content,
+            .edit-modal-content,
+            .add-question-modal-content,
+            .running-text-modal-content {
+                width: 92%;
+                max-height: 90vh;
+            }
+
+            .settings-modal-header,
+            .running-text-modal-header {
+                padding: 14px 16px;
+            }
+
+            .settings-modal-body,
+            .running-text-modal-body {
+                padding: 16px;
+            }
+
+            .settings-tabs {
+                padding: 0 16px;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+
+            .options-inputs {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .video-gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 14px;
+            }
+
+            .quiz-header {
+                padding: 12px;
+            }
+
+            .question-text {
+                font-size: 15px;
+            }
+
+            .team-choice {
+                padding: 9px;
+                font-size: 13px;
+            }
+
+            .option {
+                padding: 11px;
+                font-size: 13px;
+            }
+        }
+
+        /* Medium Devices: 601px - 768px (Tablets) */
+        @media (min-width: 601px) and (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            #setupScreen {
+                padding: 18px;
+                border-radius: 16px;
+                max-width: 600px;
+            }
+
+            .setup-header {
+                padding: 14px;
+                margin: -18px -18px 14px -18px;
+                border-radius: 16px 16px 0 0;
+            }
+
+            .setup-title {
+                font-size: 20px;
+                margin-bottom: 14px;
+            }
+
+            .team-count-buttons {
+                gap: 8px;
+            }
+
+            .team-count-btn {
+                flex: 1 1 calc(33.33% - 6px);
+                min-width: 90px;
+                padding: 10px 6px;
+                font-size: 13px;
+            }
+
+            .settings-btn-container {
+                gap: 8px;
+                top: 12px;
+                right: 12px;
+            }
+
+            .settings-btn {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+
+            .settings-modal-content,
+            .edit-modal-content,
+            .add-question-modal-content,
+            .running-text-modal-content {
+                width: 90%;
+                max-width: 700px;
+            }
+
+            .settings-modal-header,
+            .running-text-modal-header {
+                padding: 18px 24px;
+            }
+
+            .settings-modal-body,
+            .running-text-modal-body {
+                padding: 20px 24px;
+            }
+
+            .video-gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 16px;
+            }
+
+            .quiz-container {
+                flex-direction: row;
+            }
+
+            .scoreboard-panel {
+                width: 25%;
+                border-radius: 0;
+            }
+
+            .main-content {
+                width: 75%;
+            }
+
+            .question-text {
+                font-size: 16px;
+            }
+
+            .team-choice {
+                padding: 10px;
+                font-size: 13px;
+            }
+
+            .option {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+
+        /* Large Tablets/Small Desktops: 769px - 1024px */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            #setupScreen {
+                padding: 24px;
+                max-width: 700px;
+                border-radius: 18px;
+            }
+
+            .setup-header {
+                padding: 18px;
+                margin: -24px -24px 18px -24px;
+            }
+
+            .setup-title {
+                font-size: 24px;
+                margin-bottom: 16px;
+            }
+
+            .team-count-buttons {
+                gap: 10px;
+            }
+
+            .team-count-btn {
+                flex: 1 1 calc(50% - 5px);
+                min-width: 100px;
+                padding: 12px 8px;
+                font-size: 14px;
+            }
+
+            .settings-btn-container {
+                gap: 10px;
+                top: 16px;
+                right: 16px;
+            }
+
+            .settings-btn {
+                padding: 12px 16px;
+                font-size: 13px;
+            }
+
+            .settings-modal-content,
+            .edit-modal-content,
+            .add-question-modal-content,
+            .running-text-modal-content {
+                width: 85%;
+                max-width: 750px;
+            }
+
+            .video-gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 18px;
+            }
+
+            .scoreboard-panel {
+                width: 28%;
+            }
+
+            .main-content {
+                width: 72%;
+            }
+
+            .question-text {
+                font-size: 18px;
+            }
+
+            .option {
+                padding: 14px;
+                font-size: 15px;
+            }
+        }
+
+        /* Large Desktops: 1025px - 1200px */
+        @media (min-width: 1025px) and (max-width: 1200px) {
+            #setupScreen {
+                padding: 28px;
+                max-width: 600px;
+            }
+
+            .setup-header {
+                padding: 20px;
+                margin: -28px -28px 20px -28px;
+            }
+
+            .setup-title {
+                font-size: 26px;
+            }
+
+            .team-count-buttons {
+                gap: 12px;
+            }
+
+            .team-count-btn {
+                flex: 1 1 calc(50% - 6px);
+                padding: 12px 10px;
+                font-size: 15px;
+            }
+
+            .settings-modal-content,
+            .edit-modal-content,
+            .add-question-modal-content {
+                width: 80%;
+                max-width: 800px;
+            }
+
+            .video-gallery-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+            }
+
+            .scoreboard-panel {
+                width: 30%;
+            }
+
+            .main-content {
+                width: 70%;
+            }
+
+            .question-text {
+                font-size: 19px;
+            }
+
+            .option {
+                padding: 15px;
+                font-size: 16px;
+            }
+        }
+
+        /* Extra Large Desktops: 1201px+ */
+        @media (min-width: 1201px) {
+            #setupScreen {
+                padding: 30px;
+                max-width: 600px;
+            }
+
+            .team-count-buttons {
+                gap: 14px;
+            }
+
+            .team-count-btn {
+                flex: 1 1 calc(50% - 7px);
+                padding: 14px 12px;
+                font-size: 16px;
+            }
+
+            .settings-modal-content,
+            .edit-modal-content,
+            .add-question-modal-content {
+                max-width: 900px;
+            }
+
+            .video-gallery-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 22px;
+            }
+
+            .scoreboard-panel {
+                width: 32%;
+            }
+
+            .main-content {
+                width: 68%;
+            }
+
+            .question-text {
+                font-size: 20px;
+            }
+
+            .option {
+                padding: 16px;
+                font-size: 17px;
+            }
+        }
+
+        /* ============================================
+           MOBILE-SPECIFIC OPTIMIZATIONS
+           ============================================ */
+
+        /* Touch-friendly targets for mobile */
+        @media (hover: none) and (pointer: coarse) {
+            button {
+                min-height: 44px;
+            }
+
+            .team-count-btn,
+            .team-choice,
+            .option {
+                min-height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            input,
+            textarea,
+            select {
+                min-height: 44px;
+                font-size: 16px;
+            }
+        }
+
+        /* Landscape Mode Optimizations */
+        @media (orientation: landscape) {
+            body {
+                min-height: auto;
+            }
+
+            #setupScreen {
+                max-height: 95vh;
+                overflow-y: auto;
+            }
+
+            .quiz-container {
+                flex-direction: row;
+            }
+
+            .scoreboard-panel {
+                width: 30%;
+            }
+
+            .main-content {
+                width: 70%;
+                max-height: 95vh;
+            }
+        }
+
+        @media (orientation: landscape) and (max-height: 500px) {
+            .setup-header {
+                padding: 8px;
+                margin: -12px -12px 8px -12px;
+            }
+
+            .setup-title {
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+
+            .team-count-btn {
+                padding: 6px;
+                font-size: 11px;
+            }
+
+            .quiz-header {
+                padding: 8px;
+            }
+
+            .quiz-org-name {
+                font-size: 12px;
+            }
+
+            .question-text {
+                font-size: 13px;
+            }
+
+            .option {
+                padding: 8px;
+                font-size: 12px;
+            }
+        }
+
+        /* ============================================
+           PRINT MEDIA & ACCESSIBILITY
+           ============================================ */
+
+        @media print {
+            .settings-btn-container,
+            .quiz-back-btn,
+            .quiz-home-btn,
+            .watermark {
+                display: none;
+            }
+
+            #setupScreen,
+            #quizScreen {
+                box-shadow: none;
+                border: 1px solid #000;
+            }
+        }
+
+        /* Reduced Motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* High Contrast Mode Support */
+        @media (prefers-contrast: more) {
+            .team-count-btn {
+                border-width: 3px;
+            }
+
+            .option {
+                border-width: 2px;
+            }
+
+            button {
+                outline: 2px solid currentColor;
+            }
+        }
+
+        /* Dark Mode Support (if user's system prefers) */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #0a0e27 0%, #151b2a 50%, #1f2937 100%);
+            }
+
+            #setupScreen {
+                background: linear-gradient(135deg, rgba(20, 20, 40, 0.98) 0%, rgba(30, 30, 60, 0.98) 100%);
+                color: #e0e0e0;
+            }
+
+            .setup-title,
+            .question-item h4 {
+                color: #f0f0f0;
+            }
+
+            .setup-label {
+                color: #d0d0d0;
+            }
+
+            .team-count-btn {
+                background: #2a2a4a;
+                color: #e0e0e0;
+                border-color: #4a4a6a;
+            }
+
+            .team-name-input,
+            .questions-input,
+            .form-group input,
+            .form-group textarea {
+                background: #1a1a3a;
+                color: #e0e0e0;
+                border-color: #4a4a6a;
+            }
+        }
+
+        /* Safeguard: Ensure minimum touch targets */
+        @media (max-width: 1024px) {
+            button:not(.close-modal-btn) {
+                min-height: 40px;
+            }
+
+            input,
+            textarea,
+            select {
+                min-height: 40px;
+            }
+        }
+
+        /* Ensure text readability */
+        @media (max-width: 480px) {
+            body {
+                font-size: 14px;
+            }
+        }
+
+        @media (min-width: 481px) and (max-width: 768px) {
+            body {
+                font-size: 15px;
+            }
+        }
+
+        /* Prevent horizontal scrolling */
+        * {
+            max-width: 100%;
+        }
+
+        html, body {
+            overflow-x: hidden;
         }
     </style>
 </head>
