@@ -925,13 +925,170 @@
         }
 
         .video-skip-btn {
-            background: #e0e0e0;
-            color: #333;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
         }
 
         .video-skip-btn:hover {
-            background: #d0d0d0;
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
             transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Video Gallery Modal */
+        .video-gallery-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2500;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .video-gallery-modal.active {
+            display: flex;
+        }
+
+        .video-gallery-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+        }
+
+        .video-gallery-header {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .video-gallery-header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-family: 'TAU-Marutham', sans-serif;
+            flex: 1;
+            text-align: center;
+        }
+
+        .video-gallery-close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .video-gallery-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .video-gallery-body {
+            padding: 30px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .video-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+
+        .video-gallery-item {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .video-gallery-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .video-gallery-thumbnail {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+
+        .video-gallery-canvas {
+            width: 100%;
+            height: 120px;
+            display: block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            object-fit: cover;
+        }
+
+        .video-gallery-title {
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            word-break: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .video-gallery-play-icon {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(102, 126, 234, 0.9);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-gallery-item:hover .video-gallery-play-icon {
+            opacity: 1;
         }
 
         /* Running Text Modal */
@@ -3008,7 +3165,7 @@
 
         <div class="setup-section">
             <label class="setup-label">Number of Questions:</label>
-            <input type="number" id="numQuestions" class="questions-input" min="1" max="66" placeholder="Enter number of questions">
+            <input type="number" id="numQuestions" class="questions-input" min="1" max="1000" placeholder="Enter number of questions">
         </div>
 
         <button id="startBtn" class="start-btn" disabled>Start Assessment</button>
@@ -3019,6 +3176,7 @@
         <button class="settings-btn" onclick="openSettingsModal()">⚙️ Question Management</button>
         <button class="settings-btn" onclick="openRunningTextModal()">📝 Running Text</button>
         <button class="settings-btn" onclick="openThemeModal()">🎨 Theme</button>
+        <button class="settings-btn" onclick="openVideoGallery()">🎥 Videos</button>
     </div>
 
     <!-- Quiz Screen -->
@@ -4110,7 +4268,7 @@
             totalQuestionsToAsk = parseInt(numQuestionsInput);
             
             // Validate input range
-            if (totalQuestionsToAsk < 1 || totalQuestionsToAsk > 66) {
+            if (totalQuestionsToAsk < 1 || totalQuestionsToAsk > 1000) {
                 setupWarningMessage.textContent = 'Please enter a valid number of questions';
                 setupWarningMessage.style.display = 'block';
                 return;
@@ -4778,7 +4936,7 @@
             selectedTeam = null;
             answeredQuestions.clear();
             answeredQuestionsHistory = [];
-            totalQuestionsToAsk = 66;
+            totalQuestionsToAsk = 0;
 
             // Clear all UI selections
             document.querySelectorAll('.team-count-btn').forEach(b => b.classList.remove('selected'));
@@ -4805,7 +4963,7 @@
             selectedTeam = null;
             answeredQuestions.clear();
             answeredQuestionsHistory = [];
-            totalQuestionsToAsk = 66;
+            totalQuestionsToAsk = 0;
 
             document.querySelectorAll('.team-count-btn').forEach(b => b.classList.remove('selected'));
             document.getElementById('numQuestions').value = '';
@@ -4895,6 +5053,67 @@
             }
         }
 
+        function initializeSettingsThemeSelector() {
+            try {
+                console.log('Initializing settings theme selector...');
+                const themeGrid = document.getElementById('settingsThemeGrid');
+                if (!themeGrid) {
+                    console.error('Settings theme grid not found');
+                    return;
+                }
+                
+                console.log('Theme grid found:', themeGrid);
+                themeGrid.innerHTML = '';
+
+                if (!Array.isArray(themes)) {
+                    console.error('Themes array not found or not an array:', themes);
+                    return;
+                }
+
+                console.log('Creating theme options. Number of themes:', themes.length);
+                themes.forEach((theme, index) => {
+                    const option = document.createElement('div');
+                    option.className = 'theme-option' + (selectedThemeId === theme.id ? ' active' : '');
+                    option.innerHTML = `
+                        <div class="theme-color-preview" style="background: ${theme.gradient}"></div>
+                        <div class="theme-name">${theme.name}</div>
+                    `;
+                    option.addEventListener('click', () => {
+                        selectedThemeId = theme.id;
+                        initializeSettingsThemeSelector();
+                    });
+                    themeGrid.appendChild(option);
+                    if (index < 3) console.log('Added theme:', theme.name);
+                });
+                console.log('Theme grid initialized successfully');
+            } catch (error) {
+                console.error('Error initializing settings theme selector:', error);
+            }
+        }
+
+        function applySelectedThemeFromSettings() {
+            // Remove all theme classes
+            themes.forEach(theme => {
+                document.body.classList.remove('theme-' + theme.id);
+            });
+
+            // Add selected theme class
+            document.body.classList.add('theme-' + selectedThemeId);
+
+            // Save to localStorage
+            localStorage.setItem('selectedTheme', selectedThemeId);
+
+            // Show confirmation message
+            const messageModal = document.getElementById('messageModal');
+            if (messageModal) {
+                document.getElementById('messageModalText').textContent = 'Theme applied successfully!';
+                messageModal.classList.add('active');
+                setTimeout(() => {
+                    messageModal.classList.remove('active');
+                }, 2000);
+            }
+        }
+
         function applySelectedTheme() {
             // Remove all theme classes
             themes.forEach(theme => {
@@ -4940,22 +5159,6 @@
             const savedTheme = localStorage.getItem('selectedTheme') || 'default';
             applyTheme(savedTheme);
         });
-
-        function switchTab(tabName) {
-            // Hide all tab contents
-            document.querySelectorAll('.settings-tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Remove active class from all tab buttons
-            document.querySelectorAll('.settings-tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Show selected tab
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
-        }
 
         function renderQuestionsListForEdit() {
             const container = document.getElementById('questionsListContainer');
@@ -5184,6 +5387,17 @@
             proceedAfterVideo();
         }
 
+        function backToVideoGallery() {
+            // Prevent auto-advance to next question
+            window.pendingQuestionAdvance = false;
+            
+            // Close the video modal
+            closeVideoModal();
+            
+            // Open the video gallery
+            openVideoGallery();
+        }
+
         function proceedAfterVideo() {
             // Close the video modal
             const modal = document.getElementById('videoModal');
@@ -5216,6 +5430,107 @@
                 videoPlayer.pause();
                 videoPlayer.currentTime = 0;
             }
+        }
+
+        function openVideoGallery() {
+            const modal = document.getElementById('videoGalleryModal');
+            modal.classList.add('active');
+            renderVideoGallery();
+        }
+
+        function closeVideoGallery() {
+            const modal = document.getElementById('videoGalleryModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        function renderVideoGallery() {
+            const gallery = document.getElementById('videoGalleryGrid');
+            gallery.innerHTML = '';
+            
+            if (!availableVideos || availableVideos.length === 0) {
+                gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">No videos available</p>';
+                return;
+            }
+            
+            availableVideos.forEach((videoSrc) => {
+                const videoName = videoSrc.split('/').pop().replace('.mp4', '');
+                const item = document.createElement('div');
+                item.className = 'video-gallery-item';
+                item.innerHTML = `
+                    <div style="position: relative; flex: 1; overflow: hidden;">
+                        <canvas class="video-gallery-canvas" data-src="${videoSrc}" width="200" height="120"></canvas>
+                        <div class="video-gallery-play-icon">▶️</div>
+                    </div>
+                    <div class="video-gallery-title">${videoName}</div>
+                `;
+                item.onclick = () => playSelectedVideo(videoSrc);
+                gallery.appendChild(item);
+                
+                // Load first frame of video as thumbnail
+                loadVideoThumbnail(videoSrc, item.querySelector('.video-gallery-canvas'));
+            });
+        }
+
+        function loadVideoThumbnail(videoSrc, canvas) {
+            const video = document.createElement('video');
+            video.crossOrigin = 'anonymous';
+            
+            video.addEventListener('loadedmetadata', () => {
+                video.currentTime = 0.5; // Get frame at 0.5 seconds
+            }, { once: true });
+            
+            video.addEventListener('seeked', () => {
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            }, { once: true });
+            
+            video.addEventListener('error', () => {
+                // Fallback: create gradient background if video fails to load
+                const ctx = canvas.getContext('2d');
+                const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+                gradient.addColorStop(0, '#667eea');
+                gradient.addColorStop(1, '#764ba2');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 40px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('🎬', canvas.width / 2, canvas.height / 2);
+            });
+            
+            video.src = videoSrc;
+        }
+
+        function playSelectedVideo(videoSrc) {
+            // Close gallery
+            closeVideoGallery();
+            
+            // Open video modal with selected video
+            const videoSource = document.getElementById('videoSource');
+            videoSource.src = videoSrc;
+            
+            const videoPlayer = document.getElementById('videoPlayer');
+            if (videoPlayer) {
+                videoPlayer.load();
+            }
+            
+            const videoModal = document.getElementById('videoModal');
+            videoModal.classList.add('active');
+            
+            // Auto-play
+            setTimeout(() => {
+                const playPromise = videoPlayer.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        console.log('Video playing from gallery');
+                    }).catch(err => {
+                        console.error('Autoplay error:', err);
+                    });
+                }
+            }, 500);
         }
 
         // Running Text Modal Functions
@@ -5494,7 +5809,7 @@
             </div>
             <div class="video-modal-buttons">
                 <button class="video-play-btn" onclick="playVideoNow()">▶️ Play Now</button>
-                <button class="video-skip-btn" onclick="skipVideoForNow()">⏭️ Skip for Now</button>
+                <button class="video-skip-btn" onclick="backToVideoGallery()">📂 Back to Gallery</button>
             </div>
         </div>
     </div>
@@ -5511,6 +5826,19 @@
             </div>
             <div class="theme-modal-footer">
                 <button class="theme-apply-btn" onclick="applySelectedTheme()">Apply Theme</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Gallery Modal -->
+    <div id="videoGalleryModal" class="video-gallery-modal">
+        <div class="video-gallery-modal-content">
+            <div class="video-gallery-header">
+                <h2>🎬 Video Gallery</h2>
+                <button class="video-gallery-close-btn" onclick="closeVideoGallery()">✕</button>
+            </div>
+            <div class="video-gallery-body">
+                <div class="video-gallery-grid" id="videoGalleryGrid"></div>
             </div>
         </div>
     </div>
