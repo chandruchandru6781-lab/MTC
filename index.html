@@ -1091,6 +1091,160 @@
             opacity: 1;
         }
 
+        /* File Gallery Modal */
+        .file-gallery-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2500;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .file-gallery-modal.active {
+            display: flex;
+        }
+
+        .file-gallery-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+        }
+
+        .file-gallery-header {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-gallery-header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-family: 'TAU-Marutham', sans-serif;
+            flex: 1;
+            text-align: center;
+        }
+
+        .file-gallery-close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .file-gallery-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .file-gallery-body {
+            padding: 30px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .file-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+
+        .file-gallery-item {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+            text-decoration: none;
+        }
+
+        .file-gallery-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .file-gallery-icon {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: white;
+            position: relative;
+        }
+
+        .file-gallery-icon .file-icon {
+            font-size: 50px;
+        }
+
+        .file-gallery-title {
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            word-break: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .file-gallery-download-icon {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(102, 126, 234, 0.9);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .file-gallery-item:hover .file-gallery-download-icon {
+            opacity: 1;
+        }
+
         /* Running Text Modal */
         .running-text-modal {
             display: none;
@@ -3177,6 +3331,7 @@
         <button class="settings-btn" onclick="openRunningTextModal()">📝 Running Text</button>
         <button class="settings-btn" onclick="openThemeModal()">🎨 Theme</button>
         <button class="settings-btn" onclick="openVideoGallery()">🎥 Videos</button>
+        <button class="settings-btn" onclick="openFileGallery()">📁 Files</button>
     </div>
 
     <!-- Quiz Screen -->
@@ -5622,7 +5777,151 @@
             }
         }
 
+        // ===== FILE GALLERY FUNCTIONS =====
+        function openFileGallery() {
+            const modal = document.getElementById('fileGalleryModal');
+            modal.classList.add('active');
+            renderFileGallery();
+        }
 
+        function closeFileGallery() {
+            const modal = document.getElementById('fileGalleryModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        function renderFileGallery() {
+            const gallery = document.getElementById('fileGalleryGrid');
+            gallery.innerHTML = '';
+            
+            // Get files from the files folder
+            const availableFiles = [
+                { name: 'Document 1', path: 'files/document1.pdf', icon: '📄' },
+                { name: 'Document 2', path: 'files/document2.pdf', icon: '📄' },
+                { name: 'Image 1', path: 'files/image1.jpg', icon: '🖼️' },
+                { name: 'Spreadsheet', path: 'files/data.xlsx', icon: '📊' },
+                { name: 'Presentation', path: 'files/presentation.pptx', icon: '📑' },
+                { name: 'Archive', path: 'files/archive.zip', icon: '📦' }
+            ];
+            
+            // Check for actual files from server
+            loadAvailableFiles().then(files => {
+                gallery.innerHTML = '';
+                
+                if (!files || files.length === 0) {
+                    gallery.innerHTML = '<p style=\"grid-column: 1/-1; text-align: center; padding: 40px; color: #999;\">No files available. Create a \"files\" folder in your project directory.</p>';
+                    return;
+                }
+                
+                files.forEach((file) => {
+                    const item = document.createElement('div');
+                    item.className = 'file-gallery-item';
+                    
+                    const fileIcon = getFileIcon(file.name);
+                    
+                    item.innerHTML = `
+                        <div class="file-gallery-icon">
+                            <span class="file-icon">${fileIcon}</span>
+                            <div class="file-gallery-download-icon">⬇️</div>
+                        </div>
+                        <div class="file-gallery-title">${file.name}</div>
+                    `;
+                    
+                    item.onclick = () => downloadFile(file.path, file.name);
+                    gallery.appendChild(item);
+                });
+            }).catch(err => {
+                console.error('Error loading files:', err);
+                gallery.innerHTML = '<p style=\"grid-column: 1/-1; text-align: center; padding: 40px; color: #999;\">Unable to load files. Check console for details.</p>';
+            });
+        }
+
+        function getFileIcon(fileName) {
+            const ext = fileName.split('.').pop().toLowerCase();
+            const icons = {
+                'pdf': '📄',
+                'doc': '📝',
+                'docx': '📝',
+                'txt': '📋',
+                'xls': '📊',
+                'xlsx': '📊',
+                'csv': '📊',
+                'ppt': '📑',
+                'pptx': '📑',
+                'jpg': '🖼️',
+                'jpeg': '🖼️',
+                'png': '🖼️',
+                'gif': '🖼️',
+                'zip': '📦',
+                'rar': '📦',
+                '7z': '📦',
+                'mp3': '🎵',
+                'mp4': '🎬',
+                'avi': '🎬',
+                'mov': '🎬'
+            };
+            return icons[ext] || '📎';
+        }
+
+        async function loadAvailableFiles() {
+            try {
+                // This will attempt to fetch a list of files from the files directory
+                const response = await fetch('files/', { method: 'HEAD' });
+                
+                if (!response.ok) {
+                    return [];
+                }
+                
+                // Since direct directory listing isn't supported in browsers,
+                // we'll use a fallback approach with common file names
+                const commonFiles = [
+                    'README.md',
+                    'guide.pdf',
+                    'instructions.txt',
+                    'resources.pdf',
+                    'notes.docx',
+                    'slides.pptx',
+                    'data.xlsx',
+                    'archive.zip'
+                ];
+                
+                const existingFiles = [];
+                
+                // Check which files actually exist
+                for (const file of commonFiles) {
+                    try {
+                        const fileResponse = await fetch(`files/${file}`, { method: 'HEAD' });
+                        if (fileResponse.ok) {
+                            existingFiles.push({
+                                name: file,
+                                path: `files/${file}`
+                            });
+                        }
+                    } catch (err) {
+                        // File doesn't exist, continue
+                    }
+                }
+                
+                return existingFiles.length > 0 ? existingFiles : [];
+                
+            } catch (err) {
+                console.error('Error loading files:', err);
+                return [];
+            }
+        }
+
+        function downloadFile(filePath, fileName) {
+            // Create a temporary link to download the file
+            const link = document.createElement('a');
+            link.href = filePath;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showMessageModal('✅ File download started: ' + fileName);
+        }
 
         // Initialize running text on page load
         document.addEventListener('DOMContentLoaded', async function() {
@@ -5891,6 +6190,19 @@
             </div>
             <div class="video-gallery-body">
                 <div class="video-gallery-grid" id="videoGalleryGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- File Gallery Modal -->
+    <div id="fileGalleryModal" class="file-gallery-modal">
+        <div class="file-gallery-modal-content">
+            <div class="file-gallery-header">
+                <h2>📁 Files</h2>
+                <button class="file-gallery-close-btn" onclick="closeFileGallery()">✕</button>
+            </div>
+            <div class="file-gallery-body">
+                <div class="file-gallery-grid" id="fileGalleryGrid"></div>
             </div>
         </div>
     </div>
