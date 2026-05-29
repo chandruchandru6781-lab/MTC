@@ -1245,6 +1245,45 @@
             opacity: 1;
         }
 
+        .file-gallery-actions {
+            display: flex;
+            gap: 10px;
+            padding: 12px;
+            background: #f0f4ff;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .file-action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-action-btn.see {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .file-action-btn.see:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .file-action-btn.download {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .file-action-btn.download:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
+        }
+
         /* Running Text Modal */
         .running-text-modal {
             display: none;
@@ -5797,12 +5836,7 @@
             
             // Get files from the file folder
             const availableFiles = [
-                { name: 'Document 1', path: 'file/document1.pdf', icon: '📄' },
-                { name: 'Document 2', path: 'file/document2.pdf', icon: '📄' },
-                { name: 'Image 1', path: 'file/image1.jpg', icon: '🖼️' },
-                { name: 'Spreadsheet', path: 'file/data.xlsx', icon: '📊' },
-                { name: 'Presentation', path: 'file/presentation.pptx', icon: '📑' },
-                { name: 'Archive', path: 'file/archive.zip', icon: '📦' }
+                { name: 'final BNS 281.pdf', path: 'file/final BNS 281.pdf', icon: '📄' }
             ];
             
             // Check for actual files from server
@@ -5823,12 +5857,14 @@
                     item.innerHTML = `
                         <div class="file-gallery-icon">
                             <span class="file-icon">${fileIcon}</span>
-                            <div class="file-gallery-download-icon">⬇️</div>
                         </div>
                         <div class="file-gallery-title">${file.name}</div>
+                        <div class="file-gallery-actions">
+                            <button class="file-action-btn see" onclick="event.stopPropagation(); viewFile('${file.path}', '${file.name}')">👁️ See</button>
+                            <button class="file-action-btn download" onclick="event.stopPropagation(); downloadFile('${file.path}', '${file.name}')">⬇️ Download</button>
+                        </div>
                     `;
                     
-                    item.onclick = () => downloadFile(file.path, file.name);
                     gallery.appendChild(item);
                 });
             }).catch(err => {
@@ -5866,31 +5902,49 @@
 
         async function loadAvailableFiles() {
             try {
-                // Fetch file list from PHP endpoint
+                // Hardcoded files as fallback
+                const fallbackFiles = [
+                    { name: 'final BNS 281.pdf', path: 'file/final BNS 281.pdf' }
+                ];
+                
+                // Try to fetch file list from PHP endpoint
                 const response = await fetch('list-files.php');
                 
                 if (!response.ok) {
-                    return [];
+                    // Use fallback if PHP fails
+                    return fallbackFiles;
                 }
                 
                 const files = await response.json();
                 
                 // Check if response contains error
-                if (files.error) {
-                    console.error('Server error:', files.error);
-                    return [];
+                if (files.error || !Array.isArray(files)) {
+                    console.error('Server error or invalid response');
+                    // Use fallback on error
+                    return fallbackFiles;
                 }
                 
-                // Map server response to expected format
-                return files.map(file => ({
-                    name: file.name,
-                    path: file.path
-                }));
+                // Return files from server, or fallback if empty
+                return files.length > 0 ? files : fallbackFiles;
                 
             } catch (err) {
                 console.error('Error loading files:', err);
-                return [];
+                // Use fallback if any error occurs
+                return [{ name: 'final BNS 281.pdf', path: 'file/final BNS 281.pdf' }];
             }
+        }
+
+        function viewFile(filePath, fileName) {
+            // Open file in a new window/tab
+            const link = document.createElement('a');
+            link.href = filePath;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showMessageModal('👁️ Opening file: ' + fileName);
         }
 
         function downloadFile(filePath, fileName) {
