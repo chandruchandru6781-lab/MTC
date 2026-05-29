@@ -5795,14 +5795,14 @@
             const gallery = document.getElementById('fileGalleryGrid');
             gallery.innerHTML = '';
             
-            // Get files from the files folder
+            // Get files from the file folder
             const availableFiles = [
-                { name: 'Document 1', path: 'files/document1.pdf', icon: '📄' },
-                { name: 'Document 2', path: 'files/document2.pdf', icon: '📄' },
-                { name: 'Image 1', path: 'files/image1.jpg', icon: '🖼️' },
-                { name: 'Spreadsheet', path: 'files/data.xlsx', icon: '📊' },
-                { name: 'Presentation', path: 'files/presentation.pptx', icon: '📑' },
-                { name: 'Archive', path: 'files/archive.zip', icon: '📦' }
+                { name: 'Document 1', path: 'file/document1.pdf', icon: '📄' },
+                { name: 'Document 2', path: 'file/document2.pdf', icon: '📄' },
+                { name: 'Image 1', path: 'file/image1.jpg', icon: '🖼️' },
+                { name: 'Spreadsheet', path: 'file/data.xlsx', icon: '📊' },
+                { name: 'Presentation', path: 'file/presentation.pptx', icon: '📑' },
+                { name: 'Archive', path: 'file/archive.zip', icon: '📦' }
             ];
             
             // Check for actual files from server
@@ -5810,7 +5810,7 @@
                 gallery.innerHTML = '';
                 
                 if (!files || files.length === 0) {
-                    gallery.innerHTML = '<p style=\"grid-column: 1/-1; text-align: center; padding: 40px; color: #999;\">No files available. Create a \"files\" folder in your project directory.</p>';
+                    gallery.innerHTML = '<p style=\"grid-column: 1/-1; text-align: center; padding: 40px; color: #999;\">No files available. Create a \"file\" folder in your project directory.</p>';
                     return;
                 }
                 
@@ -5866,44 +5866,26 @@
 
         async function loadAvailableFiles() {
             try {
-                // This will attempt to fetch a list of files from the files directory
-                const response = await fetch('files/', { method: 'HEAD' });
+                // Fetch file list from PHP endpoint
+                const response = await fetch('list-files.php');
                 
                 if (!response.ok) {
                     return [];
                 }
                 
-                // Since direct directory listing isn't supported in browsers,
-                // we'll use a fallback approach with common file names
-                const commonFiles = [
-                    'README.md',
-                    'guide.pdf',
-                    'instructions.txt',
-                    'resources.pdf',
-                    'notes.docx',
-                    'slides.pptx',
-                    'data.xlsx',
-                    'archive.zip'
-                ];
+                const files = await response.json();
                 
-                const existingFiles = [];
-                
-                // Check which files actually exist
-                for (const file of commonFiles) {
-                    try {
-                        const fileResponse = await fetch(`files/${file}`, { method: 'HEAD' });
-                        if (fileResponse.ok) {
-                            existingFiles.push({
-                                name: file,
-                                path: `files/${file}`
-                            });
-                        }
-                    } catch (err) {
-                        // File doesn't exist, continue
-                    }
+                // Check if response contains error
+                if (files.error) {
+                    console.error('Server error:', files.error);
+                    return [];
                 }
                 
-                return existingFiles.length > 0 ? existingFiles : [];
+                // Map server response to expected format
+                return files.map(file => ({
+                    name: file.name,
+                    path: file.path
+                }));
                 
             } catch (err) {
                 console.error('Error loading files:', err);
