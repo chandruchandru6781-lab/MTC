@@ -5836,7 +5836,8 @@
             
             // Get files from the file folder
             const availableFiles = [
-                { name: 'BNS-Section-281.pdf', path: 'file/BNS-Section-281.pdf', icon: '📄' }
+                { name: 'BNS-Section-281.pdf', path: 'file/BNS-Section-281.pdf', icon: '📄' },
+                { name: 'old-bns-section-281.pdf', path: 'file/old-bns-section-281.pdf', icon: '📄' }
             ];
             
             // Check for actual files from server
@@ -5904,7 +5905,8 @@
             try {
                 // Hardcoded files as fallback
                 const fallbackFiles = [
-                    { name: 'BNS-Section-281.pdf', path: 'file/BNS-Section-281.pdf' }
+                    { name: 'BNS-Section-281.pdf', path: 'file/BNS-Section-281.pdf' },
+                    { name: 'old-bns-section-281.pdf', path: 'file/old-bns-section-281.pdf' }
                 ];
                 
                 // Try to fetch file list from PHP endpoint
@@ -5930,7 +5932,10 @@
             } catch (err) {
                 console.error('Error loading files:', err);
                 // Use fallback if any error occurs
-                return [{ name: 'BNS-Section-281.pdf', path: 'file/BNS-Section-281.pdf' }];
+                return [
+                    { name: 'BNS-Section-281.pdf', path: 'file/BNS-Section-281.pdf' },
+                    { name: 'old-bns-section-281.pdf', path: 'file/old-bns-section-281.pdf' }
+                ];
             }
         }
 
