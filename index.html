@@ -5836,6 +5836,7 @@
             
             // Get files from the file folder
             const availableFiles = [
+                { name: 'BNS-Section-105.pdf', path: 'file/BNS-Section-105.pdf', icon: '📄' },
                 { name: 'BNS-Section-125a.pdf', path: 'file/BNS-Section-125a.pdf', icon: '📄' },
                 { name: 'BNS-Section-125b.pdf', path: 'file/BNS-Section-125b.pdf', icon: '📄' },
                 { name: 'BNS-Section-281.pdf', path: 'file/BNS-Section-281.pdf', icon: '📄' }
@@ -5906,6 +5907,7 @@
             try {
                 // Hardcoded files as fallback
                 const fallbackFiles = [
+                    { name: 'BNS-Section-105.pdf', path: 'file/BNS-Section-105.pdf' },
                     { name: 'BNS-Section-125a.pdf', path: 'file/BNS-Section-125a.pdf' },
                     { name: 'BNS-Section-125b.pdf', path: 'file/BNS-Section-125b.pdf' },
                     { name: 'BNS-Section-281.pdf', path: 'file/BNS-Section-281.pdf' }
@@ -5935,6 +5937,7 @@
                 console.error('Error loading files:', err);
                 // Use fallback if any error occurs
                 return [
+                    { name: 'BNS-Section-105.pdf', path: 'file/BNS-Section-105.pdf' },
                     { name: 'BNS-Section-125a.pdf', path: 'file/BNS-Section-125a.pdf' },
                     { name: 'BNS-Section-125b.pdf', path: 'file/BNS-Section-125b.pdf' },
                     { name: 'BNS-Section-281.pdf', path: 'file/BNS-Section-281.pdf' }
