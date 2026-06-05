@@ -247,65 +247,17 @@
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
         }
 
-        .tools-btn-toggle {
+        .settings-btn-container {
             position: fixed;
             top: 20px;
             right: 20px;
-            z-index: 600;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .tools-btn-toggle:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
-        }
-
-        .tools-btn-toggle:active {
-            transform: translateY(0);
-        }
-
-        .tools-icon {
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-        }
-
-        .settings-btn-container {
-            position: fixed;
-            top: 75px;
-            right: 20px;
-            z-index: 550;
+            z-index: 500;
             margin: 0;
             padding: 0;
             text-align: right;
             display: flex;
             flex-direction: column;
             gap: 12px;
-            transition: all 0.3s ease;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-20px);
-            pointer-events: none;
-        }
-
-        .settings-btn-container.open {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-            pointer-events: auto;
         }
 
         .settings-btn {
@@ -317,12 +269,6 @@
             font-size: 14px;
             font-weight: 600;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            transition: all 0.2s ease;
-        }
-
-        .settings-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
         }
 
         /* Skin Color Picker Modal */
@@ -2887,48 +2833,6 @@
             z-index: 100;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
             font-family: 'TAU-Marutham', sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        .ticker-controls {
-            display: flex;
-            gap: 10px;
-            flex-shrink: 0;
-        }
-
-        .ticker-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            min-width: 80px;
-        }
-
-        .ticker-btn:hover {
-            background: rgba(255, 255, 255, 0.35);
-            border-color: rgba(255, 255, 255, 0.8);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .ticker-btn:active {
-            transform: translateY(0);
-        }
-
-        .ticker-wrapper {
-            flex: 1;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
         }
 
         .ticker-content {
@@ -2938,10 +2842,6 @@
             white-space: nowrap;
             letter-spacing: 2px;
             font-family: 'TAU-Marutham', sans-serif;
-        }
-
-        .ticker-content.paused {
-            animation-play-state: paused;
         }
 
         @keyframes scroll-left {
@@ -3619,14 +3519,8 @@
         <button id="startBtn" class="start-btn" disabled>Start Assessment</button>
     </div>
 
-    <!-- Tools Button Toggle -->
-    <button class="tools-btn-toggle" onclick="toggleSettingsButtons()">
-        <span class="tools-icon">☰</span>
-        <span>Tools</span>
-    </button>
-
     <!-- Settings Buttons (Fixed Position) -->
-    <div class="settings-btn-container" id="settingsContainer">
+    <div class="settings-btn-container">
         <button class="settings-btn" onclick="openSettingsModal()">⚙️ Question Management</button>
         <button class="settings-btn" onclick="openRunningTextModal()">📝 Running Text</button>
         <button class="settings-btn" onclick="openThemeModal()">🎨 Theme</button>
@@ -4768,8 +4662,7 @@
 
             document.getElementById('setupScreen').style.display = 'none';
             document.getElementById('quizScreen').classList.add('active');
-            document.getElementById('settingsContainer').classList.remove('open');
-            isSettingsOpen = false;
+            document.querySelector('.settings-btn-container').style.display = 'none';
 
             renderTeamSelector();
             renderQuestion();
@@ -5380,7 +5273,7 @@
         function goHome() {
             document.getElementById('setupScreen').style.display = 'block';
             document.getElementById('quizScreen').classList.remove('active');
-            // Settings container is hidden by default - user can toggle with Tools button
+            document.querySelector('.settings-btn-container').style.display = 'flex';
             document.getElementById('optionsContainer').style.display = 'grid';
             document.getElementById('teamSelectContainer').style.display = 'block';
             document.getElementById('quizEndMessage').style.display = 'none';
@@ -5408,7 +5301,7 @@
         function restartQuiz() {
             document.getElementById('setupScreen').style.display = 'block';
             document.getElementById('quizScreen').classList.remove('active');
-            // Settings container is hidden by default - user can toggle with Tools button
+            document.querySelector('.settings-btn-container').style.display = 'flex';
             document.getElementById('optionsContainer').style.display = 'grid';
             document.getElementById('teamSelectContainer').style.display = 'block';
             document.getElementById('quizEndMessage').style.display = 'none';
@@ -6722,66 +6615,10 @@
 
     <!-- Scrolling Ticker -->
     <div class="scrolling-ticker">
-        <div class="ticker-controls">
-            <button class="ticker-btn" id="pausePlayBtn" onclick="togglePauseTicker()">⏸ Pause</button>
-        </div>
-        <div class="ticker-wrapper">
-            <div class="ticker-content" id="tickerContent">
+        <div class="ticker-content">
             �️ பாதுகாப்பே முதன்மை — அவசரத்தை விட பொறுமையுடன் ஓட்டுங்கள். • 🚦 போக்குவரத்து விதிகளையும் வேக வரம்புகளையும் எப்போதும் பின்பற்றுங்கள். • 🚶‍♂️ நடைபயணிகள் மற்றும் இருசக்கர வாகன ஓட்டிகளைக் கவனமாக பார்த்து ஓட்டுங்கள். • ↔️ முன் செல்லும் வாகனத்திலிருந்து பாதுகாப்பான இடைவெளியை பராமரிக்கவும். • 🛑 திடீர் பிரேக் மற்றும் வேக உயர்வை தவிர்த்து மென்மையாக ஓட்டுங்கள். • 🔄 திருப்பம் அல்லது வழி மாற்றத்திற்கு முன் சிக்னல் கொடுக்கவும். • 🪞 பக்கக் கண்ணாடிகள் மற்றும் Blind Spot Mirror பார்த்த பின்பே வாகனத்தை இயக்கத் தொடங்குங்கள். • 📵 ஓட்டும் போது மொபைல் போன் பயன்படுத்த வேண்டாம். • 👨‍👩‍👧‍👦 பயணிகள் பாதுகாப்பாக ஏறி இறங்கிய பின் மட்டுமே வண்டியை இயக்குங்கள். • 🚪 கதவை மூடிய பின் வாகனத்தை இயக்கவும். • ⏰ நேரத்தை கடைப்பிடிக்கவும், ஆனால் பாதுகாப்பை ஒருபோதும் புறக்கணிக்க வேண்டாம். • ⛽ டீசல் சிக்கனத்தை விட பாதுகாப்புக்கே முன்னுரிமை அளிக்கவும். • 🌧️ மழை மற்றும் குறைந்த தெளிவுள்ள சூழலில் கூடுதல் கவனத்துடன் ஓட்டுங்கள். • 😊 பயணிகளிடம் கனிவுடன் பேசுங்கள். • 💳 டிஜிட்டல் பரிவர்த்தனைகளை ஊக்குவியுங்கள். • 🚌 அமைதியான ஓட்டுநர் பாதுகாப்பான மற்றும் சௌகரியமான பயணத்தை உருவாக்குகிறார்.
         </div>
     </div>
-    </div>
-
-    <script>
-        // Pause/Play Ticker Functionality
-        let isTickerPaused = false;
-
-        function togglePauseTicker() {
-            const tickerContent = document.getElementById('tickerContent');
-            const pausePlayBtn = document.getElementById('pausePlayBtn');
-            
-            isTickerPaused = !isTickerPaused;
-            
-            if (isTickerPaused) {
-                tickerContent.classList.add('paused');
-                pausePlayBtn.textContent = '▶ Play';
-                pausePlayBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
-            } else {
-                tickerContent.classList.remove('paused');
-                pausePlayBtn.textContent = '⏸ Pause';
-                pausePlayBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-            }
-        }
-
-        // Toggle Settings Buttons Visibility
-        let isSettingsOpen = false;
-
-        function toggleSettingsButtons() {
-            const settingsContainer = document.getElementById('settingsContainer');
-            isSettingsOpen = !isSettingsOpen;
-            
-            if (isSettingsOpen) {
-                settingsContainer.classList.add('open');
-            } else {
-                settingsContainer.classList.remove('open');
-            }
-        }
-
-        // Close settings when a button is clicked
-        function closeSettingsMenu() {
-            const settingsContainer = document.getElementById('settingsContainer');
-            settingsContainer.classList.remove('open');
-            isSettingsOpen = false;
-        }
-
-        // Attach close function to all setting buttons
-        document.addEventListener('DOMContentLoaded', function() {
-            const settingsBtns = document.querySelectorAll('.settings-btn-container .settings-btn');
-            settingsBtns.forEach(btn => {
-                btn.addEventListener('click', closeSettingsMenu);
-            });
-        });
-    </script>
 
 </body>
 <!-- Bootstrap 5 Local JavaScript -->
