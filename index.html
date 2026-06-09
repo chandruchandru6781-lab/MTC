@@ -6225,27 +6225,7 @@
             const gallery = document.getElementById('fileGalleryGrid');
             gallery.innerHTML = '';
             
-            // Get files from the file folder
-            const availableFiles = [
-                { name: 'BNS-Section-105.pdf', path: 'file/BNS-Section-105.pdf', icon: '📄' },
-                { name: 'BNS-Section-106(1).pdf', path: 'file/BNS-Section-106(1).pdf', icon: '📄' },
-                { name: 'BNS-Section-106(2).pdf', path: 'file/BNS-Section-106(2).pdf', icon: '📄' },
-                { name: 'BNS-Section-108.pdf', path: 'file/BNS-Section-108.pdf', icon: '📄' },
-                { name: 'BNS-Section-125a.pdf', path: 'file/BNS-Section-125a.pdf', icon: '📄' },
-                { name: 'BNS-Section-125b.pdf', path: 'file/BNS-Section-125b.pdf', icon: '📄' },
-                { name: 'BNS-Section-202.pdf', path: 'file/BNS-Section-202.pdf', icon: '📄' },
-                { name: 'BNS-Section-221.pdf', path: 'file/BNS-Section-221.pdf', icon: '📄' },
-                { name: 'BNS-Section-226.pdf', path: 'file/BNS-Section-226.pdf', icon: '📄' },
-                { name: 'BNS-Section-281.pdf', path: 'file/BNS-Section-281.pdf', icon: '📄' },
-                { name: 'MV-Act-Section-134.pdf', path: 'file/MV-Act-Section-134.pdf', icon: '📄' },
-                { name: 'MV-Act-Section-134b.pdf', path: 'file/MV-Act-Section-134b.pdf', icon: '📄' },
-                { name: 'MV-Act-Section-179.pdf', path: 'file/MV-Act-Section-179.pdf', icon: '📄' },
-                { name: 'MV-Act-Section-184.pdf', path: 'file/MV-Act-Section-184.pdf', icon: '📄' },
-                { name: 'MV-Act-Section-185.pdf', path: 'file/MV-Act-Section-185.pdf', icon: '📄' },
-                { name: 'MV-Act-Section-204.pdf', path: 'file/MV-Act-Section-204.pdf', icon: '📄' }
-            ];
-            
-            // Check for actual files from server
+            // Load files dynamically from PHP endpoint
             loadAvailableFiles().then(files => {
                 gallery.innerHTML = '';
                 
@@ -6308,71 +6288,29 @@
 
         async function loadAvailableFiles() {
             try {
-                // Hardcoded files as fallback
-                const fallbackFiles = [
-                    { name: 'BNS-Section-105.pdf', path: 'file/BNS-Section-105.pdf' },
-                    { name: 'BNS-Section-106(1).pdf', path: 'file/BNS-Section-106(1).pdf' },
-                    { name: 'BNS-Section-106(2).pdf', path: 'file/BNS-Section-106(2).pdf' },
-                    { name: 'BNS-Section-108.pdf', path: 'file/BNS-Section-108.pdf' },
-                    { name: 'BNS-Section-125a.pdf', path: 'file/BNS-Section-125a.pdf' },
-                    { name: 'BNS-Section-125b.pdf', path: 'file/BNS-Section-125b.pdf' },
-                    { name: 'BNS-Section-202.pdf', path: 'file/BNS-Section-202.pdf' },
-                    { name: 'BNS-Section-221.pdf', path: 'file/BNS-Section-221.pdf' },
-                    { name: 'BNS-Section-226.pdf', path: 'file/BNS-Section-226.pdf' },
-                    { name: 'BNS-Section-281.pdf', path: 'file/BNS-Section-281.pdf' },
-                    { name: 'MV-Act-Section-134.pdf', path: 'file/MV-Act-Section-134.pdf' },
-                    { name: 'MV-Act-Section-134b.pdf', path: 'file/MV-Act-Section-134b.pdf' },
-                    { name: 'MV-Act-Section-179.pdf', path: 'file/MV-Act-Section-179.pdf' },
-                    { name: 'MV-Act-Section-184.pdf', path: 'file/MV-Act-Section-184.pdf' },
-                    { name: 'MV-Act-Section-185.pdf', path: 'file/MV-Act-Section-185.pdf' },
-                    { name: 'MV-Act-Section-194E.pdf', path: 'file/MV-Act-Section-194E.pdf' },
-                    { name: 'MV-Act-Section-204.pdf', path: 'file/MV-Act-Section-204.pdf' },
-                    { name: 'POCSO-Act.pdf', path: 'file/POCSO-Act.pdf' }
-                ];
-                
-                // Try to fetch file list from PHP endpoint
+                // Fetch file list dynamically from PHP endpoint
                 const response = await fetch('list-files.php');
                 
                 if (!response.ok) {
-                    // Use fallback if PHP fails
-                    return fallbackFiles;
+                    console.error('Failed to fetch files from server');
+                    return [];
                 }
                 
                 const files = await response.json();
                 
-                // Check if response contains error
+                // Check if response contains error or is not an array
                 if (files.error || !Array.isArray(files)) {
-                    console.error('Server error or invalid response');
-                    // Use fallback on error
-                    return fallbackFiles;
+                    console.error('Server error or invalid response:', files);
+                    return [];
                 }
                 
-                // Return files from server, or fallback if empty
-                return files.length > 0 ? files : fallbackFiles;
+                // Return actual files from server (no hardcoded fallback)
+                return files;
                 
             } catch (err) {
                 console.error('Error loading files:', err);
-                // Use fallback if any error occurs
-                return [
-                    { name: 'BNS-Section-105.pdf', path: 'file/BNS-Section-105.pdf' },
-                    { name: 'BNS-Section-106(1).pdf', path: 'file/BNS-Section-106(1).pdf' },
-                    { name: 'BNS-Section-106(2).pdf', path: 'file/BNS-Section-106(2).pdf' },
-                    { name: 'BNS-Section-108.pdf', path: 'file/BNS-Section-108.pdf' },
-                    { name: 'BNS-Section-125a.pdf', path: 'file/BNS-Section-125a.pdf' },
-                    { name: 'BNS-Section-125b.pdf', path: 'file/BNS-Section-125b.pdf' },
-                    { name: 'BNS-Section-202.pdf', path: 'file/BNS-Section-202.pdf' },
-                    { name: 'BNS-Section-221.pdf', path: 'file/BNS-Section-221.pdf' },
-                    { name: 'BNS-Section-226.pdf', path: 'file/BNS-Section-226.pdf' },
-                    { name: 'BNS-Section-281.pdf', path: 'file/BNS-Section-281.pdf' },
-                    { name: 'MV-Act-Section-134.pdf', path: 'file/MV-Act-Section-134.pdf' },
-                    { name: 'MV-Act-Section-134b.pdf', path: 'file/MV-Act-Section-134b.pdf' },
-                    { name: 'MV-Act-Section-179.pdf', path: 'file/MV-Act-Section-179.pdf' },
-                    { name: 'MV-Act-Section-184.pdf', path: 'file/MV-Act-Section-184.pdf' },
-                    { name: 'MV-Act-Section-185.pdf', path: 'file/MV-Act-Section-185.pdf' },
-                    { name: 'MV-Act-Section-194E.pdf', path: 'file/MV-Act-Section-194E.pdf' },
-                    { name: 'MV-Act-Section-204.pdf', path: 'file/MV-Act-Section-204.pdf' },
-                    { name: 'POCSO-Act.pdf', path: 'file/POCSO-Act.pdf' }
-                ];
+                // Return empty array if error - don't use hardcoded fallback
+                return [];
             }
         }
 
