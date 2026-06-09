@@ -230,6 +230,130 @@
             box-shadow: none;
         }
 
+        .setup-buttons-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .instructions-btn {
+            padding: 14px;
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
+        }
+
+        .instructions-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(23, 162, 184, 0.4);
+        }
+
+        .instructions-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .instructions-modal.active {
+            display: flex;
+        }
+
+        .instructions-modal-content {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 650px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease;
+        }
+
+        .instructions-modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .instructions-modal-header h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .instructions-modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .instructions-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+        }
+
+        .instructions-modal-body {
+            padding: 30px;
+            color: #333;
+        }
+
+        .instruction-step {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .instruction-step h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #667eea;
+            font-size: 16px;
+        }
+
+        .instruction-step p {
+            margin: 8px 0;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .instruction-step ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+
+        .instruction-step li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
         .settings-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -518,6 +642,17 @@
             }
             50% {
                 transform: translateX(-50%) translateY(5px);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
@@ -2967,6 +3102,42 @@
                 animation: scroll-left 180s linear infinite;
                 letter-spacing: 1px;
             }
+
+            .setup-buttons-container {
+                grid-template-columns: 1fr;
+            }
+
+            .instructions-btn,
+            .start-btn {
+                width: 100%;
+            }
+
+            .instructions-modal-content {
+                max-height: 90vh;
+                margin: 10px;
+            }
+
+            .instructions-modal-header h2 {
+                font-size: 18px;
+            }
+
+            .instructions-modal-body {
+                padding: 20px;
+            }
+
+            .instruction-step {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+
+            .instruction-step h3 {
+                font-size: 15px;
+            }
+
+            .instruction-step p,
+            .instruction-step li {
+                font-size: 13px;
+            }
         }
 
         /* Watermark Styling */
@@ -3616,7 +3787,10 @@
             <input type="number" id="numQuestions" class="questions-input" min="1" max="1000" placeholder="Enter number of questions">
         </div>
 
-        <button id="startBtn" class="start-btn" disabled>Start Assessment</button>
+        <div class="setup-buttons-container">
+            <button id="instructionsBtn" class="instructions-btn" onclick="openInstructionsModal()">ℹ️ How to Start</button>
+            <button id="startBtn" class="start-btn" disabled>Start Assessment</button>
+        </div>
     </div>
 
     <!-- Tools Button Toggle -->
@@ -3633,6 +3807,58 @@
         <button class="settings-btn" onclick="openVideoGallery()">🎥 Videos</button>
         <button class="settings-btn" onclick="openFileGallery()">📁 Files</button>
         <button class="settings-btn" onclick="openSkinColorModal()">🎨 Skin Color</button>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div class="instructions-modal" id="instructionsModal">
+        <div class="instructions-modal-content">
+            <div class="instructions-modal-header">
+                <h2>📚 How to Start the Assessment Test</h2>
+                <button class="instructions-modal-close" onclick="closeInstructionsModal()">×</button>
+            </div>
+            <div class="instructions-modal-body">
+                <div class="instruction-step">
+                    <h3>Step 1: Select Number of Teams</h3>
+                    <p>Click on one of the team count buttons (1, 2, 3, 4, or 5 teams) based on how many teams will participate in this assessment.</p>
+                </div>
+
+                <div class="instruction-step">
+                    <h3>Step 2: Enter Team Names</h3>
+                    <p>After selecting the number of teams, input fields will appear. Enter the name for each team. These names will be displayed on the scoreboard during the quiz.</p>
+                </div>
+
+                <div class="instruction-step">
+                    <h3>Step 3: Set Number of Questions</h3>
+                    <p>Enter the total number of questions you want in this assessment. You can set any number from 1 to 1000.</p>
+                </div>
+
+                <div class="instruction-step">
+                    <h3>Step 4: Start Assessment</h3>
+                    <p>Click the <strong>"Start Assessment"</strong> button to begin. The quiz screen will appear with the first question.</p>
+                </div>
+
+                <div class="instruction-step">
+                    <h3>During the Quiz:</h3>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li><strong>Select Team:</strong> Choose a team from the dropdown menu</li>
+                        <li><strong>Select Answer:</strong> Click on the correct option</li>
+                        <li><strong>Next Question:</strong> Click "Next Question →" to go to the next question</li>
+                        <li><strong>Review:</strong> Click "Review Answers" button to see previously answered questions</li>
+                        <li><strong>Home:</strong> Click "🏠 Home" button to return to setup screen</li>
+                    </ul>
+                </div>
+
+                <div class="instruction-step" style="background-color: #e8f4f8; padding: 12px; border-left: 4px solid #17a2b8;">
+                    <h3>💡 Tips:</h3>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>Each team's score is tracked independently</li>
+                        <li>Scores appear on the scoreboard panel on the left</li>
+                        <li>You can access Tools menu to manage questions, videos, files, and themes</li>
+                        <li>All answers are recorded and can be reviewed at the end</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Quiz Screen -->
@@ -5423,6 +5649,27 @@
         function closeSettingsModal() {
             document.getElementById('settingsModal').classList.remove('active');
         }
+
+        // Instructions Modal Functions
+        function openInstructionsModal() {
+            document.getElementById('instructionsModal').classList.add('active');
+        }
+
+        function closeInstructionsModal() {
+            document.getElementById('instructionsModal').classList.remove('active');
+        }
+
+        // Close instructions modal when clicking outside
+        document.addEventListener('DOMContentLoaded', function() {
+            const instructionsModal = document.getElementById('instructionsModal');
+            if (instructionsModal) {
+                instructionsModal.addEventListener('click', function(e) {
+                    if (e.target === instructionsModal) {
+                        closeInstructionsModal();
+                    }
+                });
+            }
+        });
 
         // Theme Management Functions
         let selectedThemeId = localStorage.getItem('selectedTheme') || 'default';
