@@ -4197,13 +4197,15 @@
     }
         .question-selector {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-            gap: 8px;
-            margin-top: 24px;
+            grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+            gap: 6px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.2);
         }
         .question-number-btn {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border: none;
             border-radius: 50%;
             background-color: rgba(255,255,255,0.2);
@@ -7553,7 +7555,13 @@
                     questionSelector.appendChild(btn);
                 }
 
-                scoreboardPanel.appendChild(questionSelector);
+                // Insert right after the scoreboard content (not after the footer)
+                const contentWrapper = scoreboardPanel.querySelector('#scoreboardContent')?.parentElement;
+                if (contentWrapper) {
+                    contentWrapper.appendChild(questionSelector);
+                } else {
+                    scoreboardPanel.insertBefore(questionSelector, scoreboardPanel.querySelector('.scoreboard-footer'));
+                }
             }
 
             // Wait for the quiz to start and the scoreboard panel to be available
