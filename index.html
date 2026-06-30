@@ -5704,8 +5704,32 @@
                 btn.addEventListener('click', () => selectOption(optionLetter));
                 optionsContainer.appendChild(btn);
             });
-
             // Only reset selectedTeam if multiple teams (not for single team mode)
+            // If this question was already answered, reapply UI state
+            if (answeredQuestions.has(currentQuestionIndex)) {
+                const historyEntry = answeredQuestionsHistory.slice().reverse().find(entry => 
+                    entry.questionIndex === questionIndex);
+                if (historyEntry) {
+                    const selectedOption = historyEntry.selectedAnswer;
+                    const isCorrect = historyEntry.isCorrect;
+                    // Highlight selected and correct (do not disable buttons)
+                    document.querySelectorAll('.option-btn').forEach((btn, index) => {
+                        const optionLetter = ['A', 'B', 'C', 'D'][index];
+                        if (isCorrect) {
+                            if (optionLetter === selectedOption) {
+                                btn.classList.add('correct');
+                            }
+                        } else {
+                            if (optionLetter === selectedOption) {
+                                btn.classList.add('wrong');
+                            }
+                            if (optionLetter === question.answer) {
+                                btn.classList.add('correct');
+                            }
+                        }
+                    });
+                }
+            }
             if (teamNames.length > 1) {
                 selectedTeam = null;
                 document.querySelectorAll('.team-btn').forEach(b => b.classList.remove('selected'));
@@ -5764,7 +5788,7 @@
             
             // Store answer history for review
             answeredQuestionsHistory.push({
-                questionIndex: currentQuestionIndex,
+                questionIndex: questionIndex,
                 question: question.question,
                 options: question.options,
                 selectedAnswer: selectedOption,
