@@ -4231,6 +4231,122 @@
       50% { transform: scale(1.05); }
       100% { transform: scale(1); }
     }
+    /* Mobile Layout */
+    @media (max-width: 768px) {
+        /* Hide sidebar by default and set as overlay */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 8px 0;
+            z-index: 50;
+            overflow-y: auto;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        .sidebar.mobile-open {
+            transform: translateX(0);
+        }
+        /* Hide the desktop menu toggle and show mobile menu toggle */
+        .mobile-menu-toggle {
+            display: block !important;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1100;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        /* Hide the mobile menu toggle on desktop */
+        @media (min-width: 769px) {
+            .mobile-menu-toggle {
+                display: none !important;
+            }
+        }
+        /* Adjust main content to be full width */
+        .sidebar-main {
+            width: 100%;
+            margin-left: 0;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        /* Make sure the quiz container takes full width */
+        .quiz-container {
+            width: 100%;
+            padding: 0;
+        }
+        /* Adjust header to have proper spacing for menu button */
+        .quiz-header {
+            padding-left: 60px; /* space for mobile menu button */
+            padding-right: 20px;
+        }
+        /* Make the sidebar width wider for better usability */
+        :root {
+            --sidebar-width: 280px;
+        }
+        /* Adjust scoreboard panel to be narrower and take less space */
+        .scoreboard-panel {
+            width: 200px !important;
+        }
+        /* Adjust question selector to be more compact */
+        .question-selector {
+            gap: 4px !important;
+            margin-top: 8px !important;
+        }
+        .question-number-btn {
+            width: 30px !important;
+            height: 30px !important;
+            font-size: 12px !important;
+        }
+        /* Make option buttons full width and touch-friendly */
+        .options-container {
+            width: 100%;
+            padding: 0 12px;
+        }
+        .option-btn {
+            width: 100%;
+            height: 48px; /* touch-friendly */
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        /* Adjust the question text to take available space */
+        .question-text {
+            flex-grow: 1;
+            margin-bottom: 20px;
+        }
+        /* Ensure the navigation buttons are visible and at bottom */
+        .quiz-footer {
+            position: sticky;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            padding: 12px;
+            margin-top: auto;
+        }
+        /* Adjust the progress bar container */
+        .progress-container {
+            margin: 12px 0;
+        }
+        /* Make sure the timer is visible */
+        .timer {
+            margin-top: 8px;
+        }
+    }
     </style>
 </head>
 <body>
