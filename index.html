@@ -3949,6 +3949,76 @@
     .settings-btn-container { display: none; }
     /* Ensure form elements are above watermark */
     #setupScreen, .quiz-container { position: relative; z-index: 1; }
+
+    /* ===== FULL APP MOBILE RESPONSIVE PASS ===== */
+
+    /* Tablet: 481px - 768px */
+    @media (max-width: 768px) {
+        .setup-title { font-size: 22px !important; }
+        .team-count-buttons { flex-wrap: wrap; }
+        .team-count-btn { flex: 1 1 30%; min-width: 90px; font-size: 14px; padding: 10px; }
+        .quiz-header { padding: 0 10px !important; flex-wrap: wrap; min-height: auto !important; }
+        .quiz-header-left { min-width: auto; gap: 6px; padding: 8px 0; }
+        .quiz-header-center { order: -1; flex-basis: 100%; padding: 8px 0 4px; }
+        .quiz-header-right { min-width: auto; padding: 8px 0; }
+        .quiz-back-btn, .quiz-home-btn, .quiz-tools-btn { font-size: 13px; padding: 8px 12px; }
+        .quiz-org-name { font-size: 16px !important; }
+        .quiz-org-subtitle { font-size: 11px !important; }
+        .scoreboard-panel { width: 100% !important; min-width: 0 !important; }
+        .quiz-container { flex-direction: column !important; }
+    }
+
+    /* Mobile: up to 480px */
+    @media (max-width: 480px) {
+        #setupScreen { padding: 16px !important; }
+        .setup-title { font-size: 18px !important; margin-bottom: 14px; }
+        .setup-label { font-size: 14px; }
+        .team-count-btn { flex: 1 1 45%; font-size: 13px; padding: 10px 6px; }
+        .options-container { grid-template-columns: 1fr !important; }
+        .option-btn { padding: 12px; font-size: 14px; }
+        .quiz-org-name { font-size: 14px !important; }
+        .quiz-org-subtitle { font-size: 10px !important; }
+        .quiz-back-btn span, .quiz-home-btn span { display: none; }
+        .quiz-back-btn, .quiz-home-btn, .quiz-tools-btn { padding: 8px 10px; font-size: 12px; }
+        .quiz-option-btn { padding: 14px 10px !important; font-size: 14px !important; }
+        .settings-modal-content, .running-text-modal .settings-modal-content,
+        .theme-modal .settings-modal-content, .video-modal .settings-modal-content,
+        .file-gallery-modal .settings-modal-content, .skin-color-modal .settings-modal-content {
+            width: 96% !important;
+            max-height: 92vh !important;
+        }
+        .scrolling-ticker, .ticker-content { font-size: 12px !important; }
+        .ticker-btn { width: 32px !important; height: 32px !important; }
+    }
+
+    /* Sidebar already responsive from earlier pass - reinforcing here */
+    @media (max-width: 768px) {
+        :root { --sidebar-width: 70px; }
+        .sidebar-org-title, .sidebar-org-name, .sidebar-btn span:not(.sidebar-icon) { display: none; }
+        .sidebar-logo img { width: 40px; height: 40px; }
+        .sidebar-btn { padding: 12px 8px; justify-content: center; font-size: 0; }
+        .sidebar-divider { margin: 4px 8px 8px; }
+        .sidebar-copyright { font-size: 8px; padding: 6px 4px; }
+        .sidebar-main { margin-left: 70px !important; width: calc(100% - 70px) !important; }
+    }
+    @media (max-width: 480px) {
+        .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; width: 220px !important; }
+        .sidebar.mobile-open { transform: translateX(0); }
+        .sidebar.mobile-open .sidebar-org-title, .sidebar.mobile-open .sidebar-org-name, .sidebar.mobile-open .sidebar-btn span {
+            display: block; font-size: revert;
+        }
+        .sidebar-main { margin-left: 0 !important; width: 100% !important; }
+        .mobile-menu-toggle { display: flex !important; }
+        #setupScreen { padding-top: 60px !important; }
+    }
+    .mobile-menu-toggle {
+        display: none; position: fixed; top: 16px; left: 16px; z-index: 1200;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;
+        border: none; width: 44px; height: 44px; border-radius: 10px;
+        align-items: center; justify-content: center; font-size: 20px; cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
     /* CUSTOM CSS END */
     /* Blur background when settings panel is open */
     body:has(.settings-btn-container.open)::before {
@@ -3995,6 +4065,7 @@
 </head>
 <body>
         <div class="app-container">
+      <button class="mobile-menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('mobile-open')">☰</button>
       <aside class="sidebar">
         <div class="sidebar-logo">
           <img src="images/mtc-logo.png" alt="MTC Logo" onerror="this.style.display='none'">
