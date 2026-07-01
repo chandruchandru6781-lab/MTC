@@ -67,6 +67,7 @@
             width: 100%;
             display: flex;
             flex-direction: column;
+            flex-shrink: 0;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.8);
             position: relative;
@@ -4130,6 +4131,30 @@
         padding-bottom: 56px;
         box-sizing: border-box;
     }
+
+    /* Reserve space at the bottom of the setup screen (desktop widths) so the
+       fixed ticker never covers the last form controls (e.g. Start/Reset
+       buttons) once the form is scrolled to the bottom — this is what makes
+       scrolling with many teams selected actually reach the buttons. Scoped
+       to desktop widths so tablet/mobile breakpoints (which already set
+       their own bottom padding) are untouched. */
+    @media (min-width: 992px) {
+        #setupScreen {
+            padding-bottom: 90px !important;
+            box-sizing: border-box;
+        }
+    }
+    /* Reserve space at the bottom of the left nav sidebar (desktop widths)
+       so the fixed ticker never covers the last nav button (Skin Color) or
+       the copyright text below it once scrolled to the bottom. Mobile's
+       sidebar overlay already sits above the ticker (z-index 1100) so it
+       doesn't need this. */
+    @media (min-width: 768px) {
+        .sidebar {
+            padding-bottom: 90px;
+            box-sizing: border-box;
+        }
+    }
     @media (max-width: 768px) {
         #quizScreen.active .quiz-container {
             padding-bottom: 64px;
@@ -5399,11 +5424,8 @@
             'Videos/MD sir anti drug awareness.mp4',
             'Videos/MD sir bus first awareness.mp4',
             'Videos/MD sir speech.mp4',
-            'Videos/Womens day.mp4',
-            'Videos/women leadership.mp4',
-            'Videos/bus fiirst.mp4',
-            'Videos/chennai singa penne.mp4',
-            'Videos/driver day.mp4',
+    'Videos/Womens day.mp4',
+    'Videos/women leadership.mp4',
         ];
         let lastVideoCheckCount = 0;
         let videoCheckEnabled = true;
