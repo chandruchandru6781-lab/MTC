@@ -4220,15 +4220,26 @@
 
         /* Scoreboard panel: narrow strip on left */
         .scoreboard-panel {
-            width: 110px !important;
-            min-width: 110px !important;
+            width: 120px !important;
+            min-width: 120px !important;
             height: 100% !important;
             max-height: 100% !important;
-            padding: 10px 8px !important;
+            padding: 14px 8px 10px 8px !important;
             flex-direction: column !important;
             overflow-y: auto !important;
         }
-        .scoreboard-title { font-size: 12px !important; margin-bottom: 6px; }
+        /* Force the Scoreboard heading to always be visible on mobile.
+           Earlier legacy mobile rules in this file set display:none on
+           this element; override that here so the heading, Team box,
+           divider, and question grid never overlap. */
+        .scoreboard-title {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            font-size: 13px !important;
+            margin: 0 0 10px 0 !important;
+            padding-bottom: 8px !important;
+        }
         .team-score {
             padding: 6px 4px !important;
             font-size: 11px !important;
@@ -4258,22 +4269,40 @@
             min-width: 0 !important;
         }
 
-        /* Quiz header */
+        /* Quiz header: wrap into two rows so the Review Answers, Home and
+           Tools buttons always have room to show their icon + text
+           without being squeezed, clipped, or overlapping the title. */
         .quiz-header {
-            padding: 8px 12px !important;
+            padding: 10px 12px !important;
             min-height: auto !important;
-            flex-wrap: nowrap !important;
-            gap: 6px;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            row-gap: 8px;
+            gap: 8px;
         }
-        .quiz-header-left { min-width: auto; gap: 6px; }
-        .quiz-header-center { flex: 1; padding: 0 6px; }
-        .quiz-header-right { min-width: auto; }
+        .quiz-header-left {
+            min-width: auto;
+            gap: 8px;
+            flex: 1 1 auto;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+        .quiz-header-center {
+            order: -1;
+            flex: 1 1 100%;
+            width: 100%;
+            padding: 0 6px;
+        }
+        .quiz-header-right { min-width: auto; flex: 0 0 auto; }
         .quiz-org-name { font-size: 13px !important; }
         .quiz-org-subtitle { font-size: 10px !important; }
         .quiz-back-btn, .quiz-home-btn, .quiz-tools-btn {
             font-size: 12px !important;
-            padding: 7px 10px !important;
+            padding: 8px 12px !important;
             white-space: nowrap;
+            display: inline-flex !important;
+            align-items: center;
+            gap: 4px;
         }
 
         /* Answer buttons: single column */
@@ -4321,19 +4350,29 @@
         .setup-title { font-size: 17px !important; }
         .team-count-btn { flex: 1 1 calc(50% - 4px); font-size: 13px; padding: 10px 4px; }
 
-        /* Scoreboard even narrower */
-        .scoreboard-panel { width: 90px !important; min-width: 90px !important; padding: 8px 6px !important; }
-        .scoreboard-title { font-size: 10px !important; }
+        /* Scoreboard even narrower, but the heading still gets breathing
+           room so it never overlaps the Team box or question grid below it */
+        .scoreboard-panel { width: 96px !important; min-width: 96px !important; padding: 12px 6px 8px 6px !important; }
+        .scoreboard-title {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            font-size: 11px !important;
+            margin: 0 0 8px 0 !important;
+            padding-bottom: 6px !important;
+        }
         .team-score { font-size: 10px !important; padding: 4px !important; }
         .question-number-btn { height: 26px !important; font-size: 10px !important; }
 
-        /* Quiz header: icon-only buttons */
+        /* Quiz header: keep icon + text readable, just a bit tighter */
         .quiz-org-name { font-size: 12px !important; }
         .quiz-org-subtitle { display: none !important; }
+        .quiz-header-left { gap: 6px; }
         .quiz-back-btn, .quiz-home-btn, .quiz-tools-btn {
-            font-size: 0 !important;
+            font-size: 11px !important;
             padding: 7px 9px !important;
-            min-width: 34px;
+            gap: 3px;
+            min-width: 0;
         }
 
         .main-content { padding: 8px 10px 80px 10px !important; }
