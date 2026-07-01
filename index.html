@@ -4080,288 +4080,217 @@
     }
     /* CUSTOM CSS END */
 
-    /* ===== MOBILE RESPONSIVE FIXES ===== */
+    /* ===== UNIFIED MOBILE RESPONSIVE CSS ===== */
+
+    /* Mobile menu toggle button */
     .mobile-menu-toggle {
         display: none;
         position: fixed;
-        top: 14px;
-        left: 14px;
+        top: 12px;
+        left: 12px;
         z-index: 1200;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         border: none;
-        width: 42px;
-        height: 42px;
+        width: 44px;
+        height: 44px;
         border-radius: 10px;
         align-items: center;
         justify-content: center;
-        font-size: 18px;
+        font-size: 20px;
         cursor: pointer;
         box-shadow: 0 4px 12px rgba(0,0,0,0.25);
     }
 
+    /* Sidebar overlay for mobile */
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 55;
+    }
+    .sidebar.mobile-open ~ .sidebar-overlay,
+    .sidebar-overlay.active {
+        display: block;
+    }
+
+    /* ---- TABLET & MOBILE: ≤ 768px ---- */
     @media (max-width: 768px) {
+
+        /* Show hamburger button */
         .mobile-menu-toggle { display: flex; }
+
+        /* Sidebar: slides in as overlay */
         .sidebar {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            height: 100vh !important;
+            width: 260px !important;
+            z-index: 1100;
             transform: translateX(-100%);
             transition: transform 0.3s ease;
-            width: 240px !important;
             box-shadow: 4px 0 20px rgba(0,0,0,0.3);
         }
-        .sidebar.mobile-open { transform: translateX(0); }
+        .sidebar.mobile-open { transform: translateX(0) !important; }
+
+        /* Main content: full width, add top padding for hamburger button */
         .sidebar-main {
             margin-left: 0 !important;
             width: 100% !important;
-            padding: 16px !important;
-            padding-top: 64px !important;
+            padding: 56px 14px 100px 14px !important;
         }
-        .sidebar-btn { font-size: 15px !important; padding: 12px 14px !important; }
 
-        .setup-title { font-size: 20px !important; }
-        .team-count-buttons { flex-wrap: wrap; }
-        .team-count-btn { flex: 1 1 30%; min-width: 85px; font-size: 13px; padding: 10px 6px; }
-
-        .quiz-header {
-            flex-wrap: wrap;
-            padding: 10px 14px !important;
+        /* Setup screen: ensure Start Assessment is above ticker */
+        #setupScreen {
+            padding: 8px 14px 100px 14px !important;
             min-height: auto !important;
-            gap: 8px;
         }
-        .quiz-header-left { min-width: auto; order: 2; gap: 8px; }
-        .quiz-header-center { order: 1; flex-basis: 100%; padding: 0; }
-        .quiz-header-right { min-width: auto; order: 3; }
-        .quiz-org-name { font-size: 20px !important; }
-        .quiz-org-subtitle { font-size: 16px !important; }
-        .quiz-back-btn, .quiz-home-btn, .quiz-tools-btn { font-size: 13px !important; padding: 8px 12px !important; }
+        .setup-title { font-size: 19px !important; margin-bottom: 12px; }
+        .team-count-buttons { flex-wrap: wrap; gap: 8px; }
+        .team-count-btn { flex: 1 1 calc(50% - 4px); min-width: 0; font-size: 14px; padding: 11px 6px; }
 
-        .quiz-container { flex-direction: column !important; overflow-y: auto !important; }
-        .scoreboard-panel {
-            width: 100% !important;
-            max-height: none !important;
-            padding: 10px 16px !important;
-            flex-direction: row !important;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 10px;
-        }
-        .scoreboard-title { width: 100%; margin-bottom: 6px; font-size: 15px; }
-        #scoreboardContent { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; }
-        .team-score { flex: 1 1 auto; min-width: 100px; margin-bottom: 0 !important; }
-
-        .main-content { padding: 12px 16px !important; overflow-y: auto !important; }
-        .question-text { font-size: 17px !important; }
-        .options-container { gap: 10px !important; }
-        .option-btn { padding: 14px 12px !important; font-size: 15px !important; }
-    }
-
-    @media (max-width: 480px) {
-        .sidebar { width: 220px !important; }
-        #setupScreen { padding: 14px !important; padding-top: 60px !important; }
-        .setup-title { font-size: 17px !important; }
-        .team-count-btn { flex: 1 1 45%; font-size: 12px; padding: 9px 4px; }
-
-        .quiz-header { padding: 8px 10px !important; }
-        .quiz-org-name { font-size: 16px !important; }
-        .quiz-org-subtitle { font-size: 12px !important; }
-        .quiz-back-btn, .quiz-home-btn, .quiz-tools-btn {
-            font-size: 0 !important;
-            padding: 8px !important;
-            min-width: 38px;
-            justify-content: center;
-        }
-
-        .main-content { padding: 10px 12px !important; }
-        .question-text { font-size: 15px !important; }
-        #optionsContainer.options-container { grid-template-columns: 1fr !important; }
-        .option-btn { padding: 12px 10px !important; font-size: 14px !important; }
-
-        .scoreboard-panel { padding: 8px 12px !important; }
-        .team-score { min-width: 80px; font-size: 12px; padding: 6px !important; }
-
-        .settings-modal-content { width: 96% !important; max-height: 92vh !important; }
-    }
-    /* Blur background when settings panel is open */
-    body:has(.settings-btn-container.open)::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(8px);
-      display: block;
-      z-index: 500;
-      pointer-events: none;
-    }
-    /* Prevent blur on tools button */
-    body:has(.settings-btn-container.open) .tools-btn-toggle {
-      backdrop-filter: none;
-    }
-        .question-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
-            gap: 6px;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-        }
-        .question-number-btn {
-            width: 36px;
-            height: 36px;
-            border: none;
-            border-radius: 50%;
-            background-color: rgba(255,255,255,0.2);
-            color: white;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .question-number-btn:hover {
-            background-color: rgba(255,255,255,0.3);
-            transform: scale(1.05);
-        }
-        .question-number-btn.active {
-            background-color: #4cc9f0;
-            color: white;
-            transform: scale(1.1);
-            box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.5);
-            animation: pulse 1.5s infinite;
-        }
-    /* Pulse animation for active question */
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    /* Mobile Layout */
-    @media (max-width: 768px) {
-        /* Hide sidebar by default and set as overlay */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            width: var(--sidebar-width);
-            background: var(--sidebar-bg);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            padding: 8px 0;
-            z-index: 50;
-            overflow-y: auto;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-        }
-        .sidebar.mobile-open {
-            transform: translateX(0);
-        }
-        /* Hide the desktop menu toggle and show mobile menu toggle */
-        .mobile-menu-toggle {
-            display: block !important;
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1100;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        /* Hide the mobile menu toggle on desktop */
-        @media (min-width: 769px) {
-            .mobile-menu-toggle {
-                display: none !important;
-            }
-        }
-        /* Adjust main content to be full width */
-        .sidebar-main {
-            width: 100%;
-            margin-left: 0;
-            padding-left: 0;
-            padding-right: 0;
-        }
-        /* Make sure the quiz container takes full width */
+        /* Quiz screen: KEEP side-by-side layout but make scoreboard narrower */
         .quiz-container {
-            width: 100%;
-            padding: 0;
+            flex-direction: row !important;
+            overflow: hidden !important;
+            height: 100% !important;
         }
-        /* Adjust header to have proper spacing for menu button */
-        .quiz-header {
-            padding-left: 60px; /* space for mobile menu button */
-            padding-right: 20px;
-        }
-        /* Make the sidebar width wider for better usability */
-        :root {
-            --sidebar-width: 280px;
-        }
-        /* Adjust scoreboard panel to be narrower and take less space */
+
+        /* Scoreboard panel: narrow strip on left */
         .scoreboard-panel {
-            width: 200px !important;
+            width: 110px !important;
+            min-width: 110px !important;
+            max-height: 100% !important;
+            padding: 10px 8px !important;
+            flex-direction: column !important;
+            overflow-y: auto !important;
         }
-        /* Adjust question selector to be more compact */
+        .scoreboard-title { font-size: 12px !important; margin-bottom: 6px; }
+        .team-score {
+            padding: 6px 4px !important;
+            font-size: 11px !important;
+            margin-bottom: 4px !important;
+        }
+
+        /* Question selector: compact 2-column grid inside narrow panel */
         .question-selector {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
             gap: 4px !important;
             margin-top: 8px !important;
+            padding-top: 8px !important;
         }
         .question-number-btn {
-            width: 30px !important;
+            width: 100% !important;
             height: 30px !important;
-            font-size: 12px !important;
+            font-size: 11px !important;
+            border-radius: 6px !important;
         }
-        /* Make option buttons full width and touch-friendly */
-        .options-container {
-            width: 100%;
-            padding: 0 12px;
+
+        /* Main content: takes remaining space */
+        .main-content {
+            flex: 1 !important;
+            padding: 10px 12px 80px 12px !important;
+            overflow-y: auto !important;
+            min-width: 0 !important;
+        }
+
+        /* Quiz header */
+        .quiz-header {
+            padding: 8px 12px !important;
+            min-height: auto !important;
+            flex-wrap: nowrap !important;
+            gap: 6px;
+        }
+        .quiz-header-left { min-width: auto; gap: 6px; }
+        .quiz-header-center { flex: 1; padding: 0 6px; }
+        .quiz-header-right { min-width: auto; }
+        .quiz-org-name { font-size: 13px !important; }
+        .quiz-org-subtitle { font-size: 10px !important; }
+        .quiz-back-btn, .quiz-home-btn, .quiz-tools-btn {
+            font-size: 12px !important;
+            padding: 7px 10px !important;
+            white-space: nowrap;
+        }
+
+        /* Answer buttons: single column */
+        #optionsContainer.options-container {
+            grid-template-columns: 1fr !important;
+            gap: 8px !important;
         }
         .option-btn {
-            width: 100%;
-            height: 48px; /* touch-friendly */
-            font-size: 16px;
-            margin-bottom: 8px;
+            padding: 13px 12px !important;
+            font-size: 15px !important;
+            text-align: left !important;
         }
-        /* Adjust the question text to take available space */
-        .question-text {
-            flex-grow: 1;
-            margin-bottom: 20px;
+
+        /* Question text */
+        .question-text, .quiz-question-text {
+            font-size: 16px !important;
+            margin-bottom: 12px !important;
         }
-        /* Ensure the navigation buttons are visible and at bottom */
-        .quiz-footer {
-            position: sticky;
-            bottom: 0;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
-            padding: 12px;
-            margin-top: auto;
+        .question-number { font-size: 12px !important; margin-bottom: 8px; }
+
+        /* Modals */
+        .settings-modal-content { width: 96% !important; max-height: 92vh !important; }
+
+        /* Settings dropdown */
+        .settings-btn-container {
+            width: calc(100vw - 32px) !important;
+            right: 16px !important;
+            top: 70px !important;
         }
-        /* Adjust the progress bar container */
-        .progress-container {
-            margin: 12px 0;
-        }
-        /* Make sure the timer is visible */
-        .timer {
-            margin-top: 8px;
-        }
-        .quiz-footer {
-            padding-bottom: env(safe-area-inset-bottom, 0);
-        }
-        /* Ensure content not hidden behind footer */
-        #setupScreen {
-            padding-bottom: 80px;
-        }
-        .quiz-container {
-            padding-bottom: 80px;
+        .settings-btn { font-size: 14px; padding: 12px 16px; }
+
+        /* Ticker smaller */
+        .scrolling-ticker {
+            font-size: 13px !important;
+            padding: 10px 14px !important;
         }
     }
+
+    /* ---- PHONE: ≤ 480px ---- */
+    @media (max-width: 480px) {
+        .sidebar { width: 240px !important; }
+
+        .sidebar-main { padding: 52px 12px 100px 12px !important; }
+        #setupScreen { padding: 8px 12px 100px 12px !important; }
+        .setup-title { font-size: 17px !important; }
+        .team-count-btn { flex: 1 1 calc(50% - 4px); font-size: 13px; padding: 10px 4px; }
+
+        /* Scoreboard even narrower */
+        .scoreboard-panel { width: 90px !important; min-width: 90px !important; padding: 8px 6px !important; }
+        .scoreboard-title { font-size: 10px !important; }
+        .team-score { font-size: 10px !important; padding: 4px !important; }
+        .question-number-btn { height: 26px !important; font-size: 10px !important; }
+
+        /* Quiz header: icon-only buttons */
+        .quiz-org-name { font-size: 12px !important; }
+        .quiz-org-subtitle { display: none !important; }
+        .quiz-back-btn, .quiz-home-btn, .quiz-tools-btn {
+            font-size: 0 !important;
+            padding: 7px 9px !important;
+            min-width: 34px;
+        }
+
+        .main-content { padding: 8px 10px 80px 10px !important; }
+        .question-text { font-size: 14px !important; }
+        .option-btn { padding: 11px 10px !important; font-size: 14px !important; }
+
+        .scrolling-ticker { font-size: 12px !important; padding: 8px 12px !important; }
+    }
+
+    /* Show quiz screen hamburger on mobile */
+    @media (max-width: 768px) {
+        .quiz-mobile-toggle { display: inline-flex !important; align-items: center; justify-content: center; }
+    }
+
     </style>
 </head>
 <body>
         <div class="app-container">
-      <button class="mobile-menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('mobile-open')">☰</button>
       <aside class="sidebar">
         <div class="sidebar-logo">
           <img src="images/mtc-logo.png" alt="MTC Logo" onerror="this.style.display='none'">
@@ -4379,6 +4308,8 @@
         <button class="sidebar-btn" onclick="openSkinColorModal(); setSidebarActive(this)">🎨 Skin Color</button>
         <div class="sidebar-copyright">© MTC Chennai</div>
       </aside>
+      <div class="sidebar-overlay" onclick="document.querySelector('.sidebar').classList.toggle('mobile-open')"></div>
+      <button class="mobile-menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('mobile-open')">☰</button>
       <main class="sidebar-main">
     <!-- Watermark -->
     <div class="watermark">
@@ -4490,6 +4421,7 @@
     <div id="quizScreen">
         <div class="quiz-header">
             <div class="quiz-header-left">
+                <button class="quiz-mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('mobile-open')" style="display:none;padding:7px 10px;border:none;background:rgba(255,255,255,0.2);color:white;border-radius:8px;font-size:18px;cursor:pointer;">☰</button>
                 <button class="quiz-back-btn" onclick="openReviewModal()">📋 Review Answers</button>
                 <button class="quiz-home-btn" onclick="goHome()">🏠 Home</button>
             </div>
