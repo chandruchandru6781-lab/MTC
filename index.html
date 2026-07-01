@@ -2213,6 +2213,7 @@
             display: flex;
             width: 100%;
             height: 100%;
+            min-height: 0;
             flex: 1;
             overflow: hidden;
         }
@@ -2224,7 +2225,10 @@
             padding: 15px 20px 30px 20px;
             border-radius: 0;
             overflow-y: auto;
-            max-height: 90vh;
+            height: 100%;
+            max-height: 100%;
+            align-self: stretch;
+            flex-shrink: 0;
             display: flex;
             flex-direction: column;
             box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
@@ -4211,6 +4215,7 @@
         .scoreboard-panel {
             width: 110px !important;
             min-width: 110px !important;
+            height: 100% !important;
             max-height: 100% !important;
             padding: 10px 8px !important;
             flex-direction: column !important;
@@ -7680,6 +7685,28 @@
                     scoreboardPanel.insertBefore(questionSelector, scoreboardPanel.querySelector('.scoreboard-footer'));
                 }
             }
+
+            // Force the scoreboard panel to extend exactly to the ticker's
+            // top edge, measured live from the actual rendered positions.
+            // This is independent of any CSS cascade/flexbox quirk, since it
+            // reads real on-screen coordinates rather than relying on
+            // percentage-height resolution.
+            function fitScoreboardPanelHeight() {
+                const panel = document.querySelector('.scoreboard-panel');
+                const ticker = document.querySelector('.scrolling-ticker');
+                const container = document.querySelector('.quiz-container');
+                if (!panel || !ticker || !container) return;
+                const tickerTop = ticker.getBoundingClientRect().top;
+                const containerTop = container.getBoundingClientRect().top;
+                const availableHeight = tickerTop - containerTop;
+                if (availableHeight > 50) {
+                    panel.style.height = availableHeight + 'px';
+                    panel.style.maxHeight = availableHeight + 'px';
+                }
+            }
+            window.addEventListener('load', fitScoreboardPanelHeight);
+            window.addEventListener('resize', fitScoreboardPanelHeight);
+            setInterval(fitScoreboardPanelHeight, 500);
 
             // Wait for the quiz to start and the scoreboard panel to be available
             const observer = new MutationObserver((mutations) => {
