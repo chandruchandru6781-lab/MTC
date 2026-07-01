@@ -4175,8 +4175,8 @@
         display: block;
     }
 
-    /* ---- TABLET & MOBILE: ≤ 768px ---- */
-    @media (max-width: 768px) {
+    /* ---- MOBILE: ≤ 767px ---- */
+    @media (max-width: 767px) {
 
         /* Show hamburger button */
         .mobile-menu-toggle { display: flex; }
@@ -4382,10 +4382,6 @@
         .scrolling-ticker { font-size: 12px !important; padding: 8px 12px !important; }
     }
 
-    /* Show quiz screen hamburger on mobile */
-    @media (max-width: 768px) {
-        .quiz-mobile-toggle { display: inline-flex !important; align-items: center; justify-content: center; }
-    }
 
     </style>
 </head>
@@ -4521,7 +4517,7 @@
     <div id="quizScreen">
         <div class="quiz-header">
             <div class="quiz-header-left">
-                <button class="quiz-mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('mobile-open')" style="display:none;padding:7px 10px;border:none;background:rgba(255,255,255,0.2);color:white;border-radius:8px;font-size:18px;cursor:pointer;">☰</button>
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()">☰</button>
                 <button class="quiz-back-btn" onclick="openReviewModal()">📋 Review Answers</button>
                 <button class="quiz-home-btn" onclick="goHome()">🏠 Home</button>
             </div>
@@ -7776,5 +7772,9 @@
 
             // Update active state every 200ms
             setInterval(updateQuestionSelectorActiveState, 200);
+
+            function toggleSidebar() {
+                document.querySelector('.sidebar').classList.toggle('mobile-open');
+            }
         </script>
 </body>
