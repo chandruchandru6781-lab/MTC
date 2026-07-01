@@ -2259,6 +2259,55 @@
             border-color: rgba(255, 255, 255, 0.5);
         }
 
+        /* Question selector (base styles — previously only defined inside
+           mobile media queries, so it rendered as unstyled default buttons
+           on desktop). Numbers under the scoreboard let you jump to any
+           question. */
+        .question-selector {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .question-number-btn {
+            width: 100%;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'TAU-Marutham', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .question-number-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-1px);
+        }
+
+        .question-number-btn.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: scale(1.08);
+        }
+
+        .question-number-btn.answered {
+            background: rgba(255, 255, 255, 0.35);
+            border-color: rgba(255, 255, 255, 0.7);
+        }
+
         .main-content {
             flex: 1;
             padding: 15px 30px 20px 30px;
@@ -7589,32 +7638,18 @@
             function setCurrentQuestion(index) {
                 currentQuestionIndex = index;
                 renderQuestion();
-                // Restore selection if any
-                const questionIndex = questionOrder[currentQuestionIndex];
-                if (userAnswers.has(questionIndex)) {
-                    const selectedOption = userAnswers.get(questionIndex);
-                    const options = document.querySelectorAll('.option-btn');
-                    options.forEach(button => {
-                        if (button.textContent.startsWith(selectedOption + ':')) {
-                            button.classList.add('selected');
-                            button.classList.add('correct');
-                        } else {
-                            button.classList.remove('selected');
-                            button.classList.remove('correct');
-                        }
-                    });
-                    // Show next button as if the question was answered
-                    document.getElementById('nextButtonContainer').style.display = 'block';
-                } else {
-                    // Hide next button if no answer
-                    document.getElementById('nextButtonContainer').style.display = 'none';
-                }
+                // renderQuestion() already restores the correct/wrong highlighting
+                // for previously-answered questions (via answeredQuestions +
+                // answeredQuestionsHistory), so we just need to show/hide Next.
+                document.getElementById('nextButtonContainer').style.display =
+                    answeredQuestions.has(currentQuestionIndex) ? 'block' : 'none';
             }
 
             function updateQuestionSelectorActiveState() {
                 const btns = document.querySelectorAll('.question-number-btn');
                 btns.forEach((btn, i) => {
                     btn.classList.toggle('active', i === currentQuestionIndex);
+                    btn.classList.toggle('answered', answeredQuestions.has(i) && i !== currentQuestionIndex);
                 });
             }
 
