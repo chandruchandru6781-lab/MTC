@@ -3531,8 +3531,6 @@
 
             #quizScreen {
                 max-width: 100%;
-                height: 85vh;
-                max-height: 85vh;
                 border-radius: 12px;
             }
 
@@ -3628,8 +3626,6 @@
 
             #quizScreen {
                 max-width: 100%;
-                height: 82vh;
-                max-height: 82vh;
                 flex-direction: column;
                 border-radius: 10px;
             }
@@ -3761,8 +3757,6 @@
 
             #quizScreen {
                 max-width: 100%;
-                height: 80vh;
-                max-height: 80vh;
                 border-radius: 8px;
             }
 
@@ -3873,8 +3867,6 @@
             }
 
             #quizScreen {
-                height: 78vh;
-                max-height: 78vh;
             }
 
             .quiz-header {
@@ -4244,9 +4236,10 @@
         }
 
         /* Setup screen: ensure Start Assessment is above ticker, and give
-           the title breathing room below the hamburger button */
+           the title generous breathing room below the hamburger button so
+           it never overlaps "Number of Teams" or other content underneath */
         #setupScreen {
-            padding: 24px 14px 100px 14px !important;
+            padding: 64px 14px 100px 14px !important;
             min-height: auto !important;
         }
         .setup-title { font-size: 19px !important; margin-bottom: 12px; }
@@ -4397,7 +4390,7 @@
         .sidebar { width: 240px !important; }
 
         .sidebar-main { padding: 52px 12px 100px 12px !important; }
-        #setupScreen { padding: 8px 12px 100px 12px !important; }
+        #setupScreen { padding: 64px 12px 100px 12px !important; }
         .setup-title { font-size: 17px !important; }
         .team-count-btn { flex: 1 1 calc(50% - 4px); font-size: 13px; padding: 10px 4px; }
 
@@ -4417,7 +4410,7 @@
 
         /* Quiz header: keep icon + text readable, just a bit tighter */
         .quiz-org-name { font-size: 12px !important; }
-        .quiz-org-subtitle { display: none !important; }
+        .quiz-org-subtitle { font-size: 9px !important; }
         .quiz-header-left { gap: 6px; }
         .quiz-back-btn, .quiz-home-btn, .quiz-tools-btn {
             font-size: 11px !important;
