@@ -4243,14 +4243,23 @@
             padding: 56px 14px 100px 14px !important;
         }
 
-        /* Setup screen: ensure Start Assessment is above ticker */
+        /* Setup screen: ensure Start Assessment is above ticker, and give
+           the title breathing room below the hamburger button */
         #setupScreen {
-            padding: 8px 14px 100px 14px !important;
+            padding: 24px 14px 100px 14px !important;
             min-height: auto !important;
         }
         .setup-title { font-size: 19px !important; margin-bottom: 12px; }
         .team-count-buttons { flex-wrap: wrap; gap: 8px; }
         .team-count-btn { flex: 1 1 calc(50% - 4px); min-width: 0; font-size: 14px; padding: 11px 6px; }
+
+        /* Hamburger button(s): not useful once the quiz has started (opens
+           the admin nav mid-assessment), and having two identical icons
+           stacked in the same spot caused visual overlap. Hide both while
+           the quiz screen is active. */
+        .app-container:has(#quizScreen.active) .mobile-menu-toggle {
+            display: none !important;
+        }
 
         /* Quiz screen: KEEP side-by-side layout but make scoreboard narrower */
         .quiz-container {
@@ -4263,6 +4272,7 @@
         .scoreboard-panel {
             width: 120px !important;
             min-width: 120px !important;
+            flex: 0 0 120px !important;
             height: 100% !important;
             max-height: 100% !important;
             padding: 14px 8px 10px 8px !important;
@@ -4393,7 +4403,7 @@
 
         /* Scoreboard even narrower, but the heading still gets breathing
            room so it never overlaps the Team box or question grid below it */
-        .scoreboard-panel { width: 96px !important; min-width: 96px !important; padding: 12px 6px 8px 6px !important; }
+        .scoreboard-panel { width: 96px !important; min-width: 96px !important; flex: 0 0 96px !important; padding: 12px 6px 8px 6px !important; }
         .scoreboard-title {
             display: block !important;
             visibility: visible !important;
