@@ -5406,6 +5406,26 @@
                 question: "பயணச்சீட்டு வழங்கும் போது நடத்துனர் முதலில் செய்ய வேண்டியது என்ன?",
                 options: ["கட்டணம் பெறுதல்", "கட்டணம் உறுதிசெய்தல்", "சீட்டு பதிவு செய்தல்", "பயணம் உறுதிப்படுத்தல்"],
                 answer: "B"
+            },
+            {
+                question: "தமிழ்நாட்டின் போக்குவரத்துத் துறை அமைச்சர் யார்?",
+                options: ["நிதின் ஜெய்ராம் கட்கரி", "அஸ்வினி வைஷ்ணவ்", "அ. விஜய் தமிழன் பார்த்திபன்", "எச். டி. குமாரசாமி"],
+                answer: "C"
+            },
+            {
+                question: "தமிழ்நாடு அரசின் போக்குவரத்துத் துறையின் தற்போதைய செயலாளர் யார்?",
+                options: ["டாக்டர் மு. வள்ளலார், இ.ஆ.ப.", "வி. உமாசங்கர், இ.ஆ.ப.", "டி. வி. சோமநாதன், இ.ஆ.ப.", "அமித் அகர்வால், இ.ஆ.ப."],
+                answer: "A"
+            },
+            {
+                question: "KMPL-ஐ எவ்வாறு கணக்கிடுவது?",
+                options: ["பயணித்த மொத்த கிலோமீட்டர் ÷ பயன்படுத்திய மொத்த லிட்டர்", "பயன்படுத்திய மொத்த லிட்டர் ÷ பயணித்த மொத்த கிலோமீட்டர்", "பயணித்த மொத்த கிலோமீட்டர் × பயன்படுத்திய மொத்த லிட்டர்", "மொத்த எரிபொருள் செலவு ÷ பயணித்த மொத்த கிலோமீட்டர்"],
+                answer: "A"
+            },
+            {
+                question: "KMPL என்பதன் விரிவாக்கம் என்ன?",
+                options: ["கிலோமீட்டர் ஒரு லிட்டருக்கு (Kilometres Per Litre)", "கிலோமீட்டர் ஒரு லிட்டருக்கு எரிபொருள் (Kilometres Per Litre Fuel)", "கிலோமீட்டர் செயல்திறன் நிலை (Kilometre Performance Level)", "கிலோமீட்டர் மற்றும் லிட்டர் விகிதம் (Kilometre & Litre Ratio)"],
+                answer: "A"
             }
         ];
 
@@ -5666,15 +5686,34 @@
                 .map(item => item.index);
             
             // Calculate required traffic symbol questions (30% or minimum 3)
+            const transportMinisterIndex = quizData.findIndex(q => q.question === 'தமிழ்நாட்டின் போக்குவரத்துத் துறை அமைச்சர் யார்?');
+            const transportSecretaryIndex = quizData.findIndex(q => q.question === 'தமிழ்நாடு அரசின் போக்குவரத்துத் துறையின் தற்போதைய செயலாளர் யார்?');
+            const mandatoryIndices = [transportMinisterIndex, transportSecretaryIndex].filter(index => index >= 0);
+
+            if (totalQuestionsToAsk < mandatoryIndices.length) {
+                setupWarningMessage.textContent = 'Please enter at least ' + mandatoryIndices.length + ' questions to include mandatory transport questions';
+                setupWarningMessage.style.display = 'block';
+                return;
+            }
+
             const requiredTrafficSymbolQuestions = Math.max(3, Math.ceil(totalQuestionsToAsk * 0.3));
-            const requiredOtherQuestions = totalQuestionsToAsk - requiredTrafficSymbolQuestions;
+            const randomQuestionCount = totalQuestionsToAsk - mandatoryIndices.length;
             
-            // Shuffle and select from each category
-            const selectedTrafficSymbol = shuffleArray(trafficSymbolIndices).slice(0, Math.min(requiredTrafficSymbolQuestions, trafficSymbolIndices.length));
-            const selectedOther = shuffleArray(otherIndices).slice(0, Math.min(requiredOtherQuestions, otherIndices.length));
+            const availableTrafficSymbolIndices = trafficSymbolIndices.filter(i => !mandatoryIndices.includes(i));
+            const availableOtherIndices = otherIndices.filter(i => !mandatoryIndices.includes(i));
             
-            // Combine and shuffle
-            questionOrder = shuffleArray([...selectedTrafficSymbol, ...selectedOther]).slice(0, totalQuestionsToAsk);
+            const selectedTrafficSymbol = shuffleArray(availableTrafficSymbolIndices).slice(0, Math.min(requiredTrafficSymbolQuestions, randomQuestionCount, availableTrafficSymbolIndices.length));
+            const remainingRandomSlots = randomQuestionCount - selectedTrafficSymbol.length;
+            const selectedOther = shuffleArray(availableOtherIndices).slice(0, Math.min(remainingRandomSlots, availableOtherIndices.length));
+            
+            let randomSelection = [...selectedTrafficSymbol, ...selectedOther];
+            if (randomSelection.length < randomQuestionCount) {
+                const otherEligible = shuffleArray([...availableTrafficSymbolIndices, ...availableOtherIndices].filter(i => !randomSelection.includes(i)));
+                randomSelection = [...randomSelection, ...otherEligible.slice(0, randomQuestionCount - randomSelection.length)];
+            }
+            
+            const mandatorySelection = shuffleArray(mandatoryIndices);
+            questionOrder = shuffleArray([...mandatorySelection, ...randomSelection]);
             
             teamNames = Array.from(document.querySelectorAll('.team-name-input')).map(input => input.value || `Team ${teamNames.length + 1}`);
             teamScores = Array(teamNames.length).fill(0);
