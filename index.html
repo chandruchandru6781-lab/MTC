@@ -967,25 +967,6 @@
             overflow-wrap: break-word;
         }
 
-        .question-item-image {
-            margin: 10px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .question-item-image img {
-            display: block;
-            max-width: 100%;
-            width: auto;
-            height: auto;
-            max-height: 220px;
-            object-fit: contain;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
-            background: white;
-        }
-
         .question-actions {
             display: flex;
             gap: 8px;
@@ -2378,31 +2359,6 @@
             font-family: 'TAU-Marutham', sans-serif;
         }
 
-        #questionImageContainer {
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            width: 100% !important;
-            margin: 15px auto 15px auto !important;
-            padding: 10px !important;
-            text-align: center !important;
-            visibility: visible !important;
-        }
-
-        #questionImageContainer img {
-            display: block !important;
-            width: auto !important;
-            max-width: 90% !important;
-            height: auto !important;
-            max-height: 280px !important;
-            object-fit: contain !important;
-            border-radius: 8px !important;
-            border: 1px solid #ddd !important;
-            background: #f9f9f9 !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
-
         .team-selector {
             display: flex;
             justify-content: center;
@@ -2509,24 +2465,20 @@
         .quiz-end-message {
             text-align: center;
             display: none;
-            padding-bottom: 0px;
-            padding-top: 0px;
-            margin-top: 0px;
+            padding-bottom: 10px;
         }
 
         .quiz-end-message h2 {
             color: #333;
             font-size: 32px;
-            margin-bottom: 2px;
-            margin-top: 0px;
+            margin-bottom: 6px;
             font-family: 'TAU-Marutham', sans-serif;
         }
 
         .quiz-end-message p {
             color: #666;
             font-size: 18px;
-            margin-bottom: 3px;
-            margin-top: 0px;
+            margin-bottom: 8px;
             font-family: 'TAU-Marutham', sans-serif;
         }
 
@@ -2583,7 +2535,7 @@
         }
 
         .final-scores {
-            margin-top: 2px;
+            margin-top: 6px;
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             padding: 12px;
             border-radius: 12px;
@@ -4654,7 +4606,7 @@
                 </div>
 
                 <div id="quizEndMessage" class="quiz-end-message">
-                    <div style="text-align: center; margin-bottom: 2px; margin-top: 0px;">
+                    <div style="text-align: center; margin-bottom: 20px;">
                         <img src="images/mtc-logo.png" alt="MTC Logo" style="max-width: 300px; height: auto; display: inline-block;" onerror="this.style.display='none'">
                     </div>
                     <h2>Assessment Complete!</h2>
@@ -6961,11 +6913,17 @@
                 return;
             }
 
+            const existingImage = quizData[currentEditingIndex] && quizData[currentEditingIndex].image;
+
             quizData[currentEditingIndex] = {
                 question: questionText,
                 options: [optionA, optionB, optionC, optionD],
                 answer: answer
             };
+
+            if (existingImage) {
+                quizData[currentEditingIndex].image = existingImage;
+            }
 
             // ✓ SAVE TO INDEXEDDB + LOCALSTORAGE
             saveQuesToIndexedDB();
