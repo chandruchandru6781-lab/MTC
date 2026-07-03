@@ -4781,6 +4781,45 @@
             }
             return null;
         }
+
+        function ensureMandatoryQuestionsExist() {
+            const requiredQuestions = [
+                {
+                    question: 'தமிழ்நாட்டின் போக்குவரத்துத் துறை அமைச்சர் யார்?',
+                    options: ['நிதின் ஜெய்ராம் கட்கரி', 'அஸ்வினி வைஷ்ணவ்', 'அ. விஜய் தமிழன் பார்த்திபன்', 'எச். டி. குமாரசாமி'],
+                    answer: 'C'
+                },
+                {
+                    question: 'தமிழ்நாடு அரசின் போக்குவரத்துத் துறையின் தற்போதைய செயலாளர் யார்?',
+                    options: ['டாக்டர் மு. வள்ளலார், இ.ஆ.ப.', 'வி. உமாசங்கர், இ.ஆ.ப.', 'டி. வி. சோமநாதன், இ.ஆ.ப.', 'அமித் அகர்வால், இ.ஆ.ப.'],
+                    answer: 'A'
+                },
+                {
+                    question: 'KMPL-ஐ எவ்வாறு கணக்கிடுவது?',
+                    options: ['பயணித்த மொத்த கிலோமீட்டர் ÷ பயன்படுத்திய மொத்த லிட்டர்', 'பயன்படுத்திய மொத்த லிட்டர் ÷ பயணித்த மொத்த கிலோமீட்டர்', 'பயணித்த மொத்த கிலோமீட்டர் × பயன்படுத்திய மொத்த லிட்டர்', 'மொத்த எரிபொருள் செலவு ÷ பயணித்த மொத்த கிலோமீட்டர்'],
+                    answer: 'A'
+                },
+                {
+                    question: 'KMPL என்பதன் விரிவாக்கம் என்ன?',
+                    options: ['கிலோமீட்டர் ஒரு லிட்டருக்கு (Kilometres Per Litre)', 'கிலோமீட்டர் ஒரு லிட்டருக்கு எரிபொருள் (Kilometres Per Litre Fuel)', 'கிலோமீட்டர் செயல்திறன் நிலை (Kilometre Performance Level)', 'கிலோமீட்டர் மற்றும் லிட்டர் விகிதம் (Kilometre & Litre Ratio)'],
+                    answer: 'A'
+                }
+            ];
+
+            let added = false;
+            requiredQuestions.forEach(reqQ => {
+                if (!quizData.some(q => q.question === reqQ.question)) {
+                    quizData.push(reqQ);
+                    added = true;
+                }
+            });
+
+            if (added) {
+                saveQuesToIndexedDB();
+                saveQuesToLocalStorage();
+                console.log('✓ Restored missing mandatory/new quiz questions');
+            }
+        }
         
         // Function to clear all storage (for debugging/reset)
         function clearQuizDataStorage() {
@@ -7387,6 +7426,7 @@
                 
                 if (savedQuestions && Array.isArray(savedQuestions)) {
                     quizData = savedQuestions;
+                    ensureMandatoryQuestionsExist();
                     console.log('✓ Loaded ' + quizData.length + ' questions from persistent storage');
                 } else {
                     console.log('ℹ Using default questions, saving to storage...');
