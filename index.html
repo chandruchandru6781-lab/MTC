@@ -5522,6 +5522,14 @@
         let lastVideoCheckCount = 0;
         let videoCheckEnabled = true;
 
+        // YouTube-hosted videos (large files, not stored in repo).
+        // To add more later, just add another { title, youtubeId } entry here.
+        // youtubeId is the part after youtu.be/ or /shorts/ or ?v= in the video URL.
+        let driveVideos = [
+            { title: 'MTC Conductor Anbazhagan sir', youtubeId: 'q6JNA0CMwOU' },
+            { title: 'MTC Driver rescue passenger life', youtubeId: '5jsF1p3CRKk' }
+        ];
+
         // Function to initialize scroll indicators
         function initializeScrollIndicators() {
             const scrollableContainers = document.querySelectorAll('.running-text-modal-body, .running-text-modal-content');
@@ -7092,6 +7100,18 @@
             if (videoPlayer) {
                 videoPlayer.pause();
                 videoPlayer.currentTime = 0;
+                videoPlayer.style.display = '';
+            }
+
+            const driveFrame = document.getElementById('galleryDriveFrame');
+            if (driveFrame) {
+                driveFrame.src = '';
+                driveFrame.style.display = 'none';
+            }
+
+            const modalHeader = document.querySelector('#galleryVideoModal .video-modal-header h3');
+            if (modalHeader) {
+                modalHeader.textContent = '🎬 Video Player';
             }
             
             // Open the video gallery
@@ -7171,6 +7191,24 @@
                 // Load first frame of video as thumbnail
                 loadVideoThumbnail(videoSrc, item.querySelector('.video-gallery-canvas'));
             });
+
+            // Add Google Drive-hosted videos to the same gallery grid
+            if (driveVideos && driveVideos.length > 0) {
+                driveVideos.forEach((driveVideo) => {
+                    const item = document.createElement('div');
+                    item.className = 'video-gallery-item';
+                    item.innerHTML = `
+                        <div style="position: relative; flex: 1; overflow: hidden; height: 120px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <img class="video-gallery-canvas" style="position: absolute; top: 0; left: 0;" src="https://img.youtube.com/vi/${driveVideo.youtubeId}/hqdefault.jpg" alt="${driveVideo.title}" onerror="this.remove();">
+                            <span style="font-size: 40px; color: white; position: relative; z-index: 0;">🎬</span>
+                            <div class="video-gallery-play-icon">▶️</div>
+                        </div>
+                        <div class="video-gallery-title">${driveVideo.title}</div>
+                    `;
+                    item.onclick = () => playSelectedDriveVideo(driveVideo.youtubeId, driveVideo.title);
+                    gallery.appendChild(item);
+                });
+            }
         }
 
         function loadVideoThumbnail(videoSrc, canvas) {
@@ -7207,6 +7245,17 @@
         function playSelectedVideo(videoSrc) {
             // Close gallery
             closeVideoGallery();
+
+            // Make sure the Drive iframe (if previously used) is hidden and the local player is visible
+            const driveFrame = document.getElementById('galleryDriveFrame');
+            if (driveFrame) {
+                driveFrame.style.display = 'none';
+                driveFrame.src = '';
+            }
+            const localPlayer = document.getElementById('galleryVideoPlayer');
+            if (localPlayer) {
+                localPlayer.style.display = '';
+            }
             
             // Open gallery video modal with selected video
             const videoSource = document.getElementById('galleryVideoSource');
@@ -7233,7 +7282,40 @@
             }, 500);
         }
 
+        function playSelectedDriveVideo(youtubeId, title) {
+            // Close gallery
+            closeVideoGallery();
+
+            // Pause/hide the local <video> player and show the YouTube iframe instead
+            const localPlayer = document.getElementById('galleryVideoPlayer');
+            if (localPlayer) {
+                localPlayer.pause();
+                localPlayer.style.display = 'none';
+            }
+
+            const driveFrame = document.getElementById('galleryDriveFrame');
+            if (driveFrame) {
+                driveFrame.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
+                driveFrame.style.display = 'block';
+            }
+
+            const modalHeader = document.querySelector('#galleryVideoModal .video-modal-header h3');
+            if (modalHeader && title) {
+                modalHeader.textContent = `🎬 ${title}`;
+            }
+
+            const videoModal = document.getElementById('galleryVideoModal');
+            videoModal.classList.add('active');
+        }
+
         function playGalleryVideoNow() {
+            const driveFrame = document.getElementById('galleryDriveFrame');
+            if (driveFrame && driveFrame.style.display !== 'none' && driveFrame.src) {
+                // A Google Drive video is active - just reload the iframe to restart playback
+                driveFrame.src = driveFrame.src;
+                return;
+            }
+
             const videoPlayer = document.getElementById('galleryVideoPlayer');
             if (!videoPlayer) {
                 console.error('Gallery video player not found');
@@ -7689,6 +7771,7 @@
                     <source id="galleryVideoSource" src="" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
+                <iframe id="galleryDriveFrame" src="" style="display:none; width:100%; height:100%; border:0;" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
             </div>
             <div class="video-modal-buttons">
                 <button class="video-play-btn" onclick="playGalleryVideoNow()">▶️ Play Now</button>
