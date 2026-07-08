@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MTC Video Gallery</title>
-  <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAADs+ElEQVR4nOy9d7wdR3n//56Z3T319nt11XuxJEuWZbl33MHGVBvbgIEvJRBqQvIlCSUkIfwIJYEkfENIgEBCCITQjG1wxd1yldV7L7e3U3d3Zn5/zJ5zj2QZbCMRjO6j1+iesmd3Z3bmmad8nucR1lrLBE3QBJ2QJP+3b2CCJmiC/vdoggFM0ASdwDTBACZogk5gmmAAEzRBJzBNMIAJmqATmCYYwARN0AlMEwxggiboBKYJBjBBE3QC0wQDmKAJOoFpggFM0ASdwDTBACZogk5gmmAAEzRBJzBNMIAJmqATmCYYwARN0AlMEwxggiboBKYJBjBBE3QC0wQDmKAJOoFpggFM0ASdwDTBACZogk5gmmAAEzRBJzBNMIAJmqATmCYYwARN0AlMEwxggiboBKYJPT+bm+ytKYvdD4nSNrXoA1ENGBdffvHnHZx5ueTKvUZgZVa1WqSnlhZ4dROlQ6Akq1eT58+VJMc8Ts3fu/PgFZtwNVrK5qXIWJSNACodK1a3E3R+S6Z7La70lQDAzt3qGPY1x8+e3dSC77rjeszX3p5Dm9G7l+N0/gujZWz/G8OT25j12dM57L+H4PItqCxTOiVNlUArjEMR43V8/Y9YUBLnLXVqtlktjQH8kRJEuxA/DRPMjdGkl6L6I0YBYiVuo36hPHLh/egnFpNkgqEku5u8F4t69+6r8OWZZ9bBr+Pl13xX3a5L/lcTff+fMqt1+2/F4izo9/49Yvu9W3kccDaUtk9Ea+6m3PDSgEwrQsdv4+pBdpQoFUSwDLtyA69WrTOd9PE+I3COyBxcGnPnj33RTOqvXsa9euXI3j7xw0ALjP0TBVwTATQ4R7e8EvVJra3RzW8yJi2lewhJxIbLat261VGw3Bmo0pkEm3b55lBNWYbp1a0yGjI6B3Lz7g9LQx9PeeKBXbI8Z4BxPs3lXdF9hS5wML+Z3n9HBxDfii4zEMR9gBS4869DlWV0SCLG7C3i24ewQOXN/fXC8A2CmmiADzT0pMKxPJ63T1Tyc0/s5S3IHzNvjPmswF39g0LGWKF3l60sc6cBzFWo5bXOqQd0NPglrHrz0WTKmY/JJlqJaS5TqAqWOJCVD9Ytk65wEbhSkY7R5Z0euYiTQUhvJ8sP6k0kAukLfotEIKcA2zEiu0u0Ai2ZjE+gGstQTOmJQ+T0MW+7J3jnlyw9rqjB0A5GDmj9o6v26gE8Dkd1QlyWGQqIf/0wdp2fqT/TBqbvH6T/NR8aFuzOAmUfbMvAJSrwr7PKB4L86i67diG3I7hYm+Y8rVE2rXqwVNPX+tq+UGtW7EblPh+BICCy8r6986N5kB8vD3AxW8JQhVPCT90GnkAkQVRxJLX1/OuKjjFkWeoJgjK7PPmIZnI4pCJg7UKfJZWDTbYCkpaq3VyR1qKC9eunOQ+ZWdjIA5h7ZR2fO9VnYn6w0q5SEGL1d2hRG3p1iQOG5py6uAn0YIoSX0eXwT0+sQC8L5gQnCIFiT5u3FIA3XFS0h8d2a08S0XWT0IwEtQV7g6aGOry+6c0U6SExIBLLNoKj0VoE9wMA32a0vPY4uQhMp512Nw9dOj4g1lc6T1H2d7OxHkOCzKK6F35eKs1X8uBI5vBVeDyWz6xSEie6Yxo19vAgAAAABJRU5ErkJggg==" />
-  <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAADs+ElEQVR4nOy9d7wdR3n//56Z3T319nt11XuxJEuWZbl33MHGVBvbgIEvJRBqQvIlCSUkIfwIJYEkfENIgEBCCITQjG1wxd1yldV7L7e3U3d3Zn5/zJ5zj2QZbCMRjO6j1+iesmd3Z3bmmad8nucR1lrLBE3QBJ2QJP+3b2CCJmiC/vdoggFM0ASdwDTBACZogk5gmmAAEzRBJzBNMIAJmqATmCYYwARN0AlMEwxggiboBKYJBjBBE3QC0wQDmKAJOoFpggFM0ASdwDTBACZogk5gmmAAEzRBJzBNMIAJmqATmCYYwARN0AlMEwxggiboBKYJBjBBE3QC0wQDmKAJOoFpggFM0ASdwDTBACZogk5gmmAAEzRBJzBNMIAJmqATmCYYwARN0AlMEwxggiboBKYJPT+bm+ytKYvdD4nSNrXoA1ENGBdffvHnHZx5ueTKvUZgZVa1WqSnlhZ4dROlQ6Akq1eT58+VJMc8Ts3fu/PgFZtwNVrK5qXIWJSNACodK1a3E3R+S6Z7La70lQDAzt3qGPY1x8+e3dSC77rjeszX3p5Dm9G7l+N0/gujZWz/G8OT25j12dM57L+H4PItqCxTOiVNlUArjEMR43V8/Y9YUBLnLXVqtlktjQH8kRJEuxA/DRPMjdGkl6L6I0YBYiVuo36hPHLh/egnFpNkgqEku5u8F4t69+6r8OWZZ9bBr+Pl13xX3a5L/lcTff+fMqt1+2/F4izo9/49Yvu9W3kccDaUtk9Ea+6m3PDSgEwrQsdv4+pBdpQoFUSwDLtyA69WrTOd9PE+I3COyBxcGnPnj33RTOqvXsa9euXI3j7xw0ALjP0TBVwTATQ4R7e8EvVJra3RzW8yJi2lewhJxIbLat261VGw3Bmo0pkEm3b55lBNWYbp1a0yGjI6B3Lz7g9LQx9PeeKBXbI8Z4BxPs3lXdF9hS5wML+Z3n9HBxDfii4zEMR9gBS4869DlWV0SCLG7C3i24ewQOXN/fXC8A2CmmiADzT0pMKxPJ63T1Tyc0/s5S3IHzNvjPmswF39g0LGWKF3l60sc6cBzFWo5bXOqQd0NPglrHrz0WTKmY/JJlqJaS5TqAqWOJCVD9Ytk65wEbhSkY7R5Z0euYiTQUhvJ8sP6k0kAukLfotEIKcA2zEiu0u0Ai2ZjE+gGstQTOmJQ+T0MW+7J3jnlyw9rqjB0A5GDmj9o6v26gE8Dkd1QlyWGQqIf/0wdp2fqT/TBqbvH6T/NR8aFuzOAmUfbMvAJSrwr7PKB4L86i67diG3I7hYm+Y8rVE2rXqwVNPX+tq+UGtW7EblPh+BICCy8r6986N5kB8vD3AxW8JQhVPCT90GnkAkQVRxJLX1/OuKjjFkWeoJgjK7PPmIZnI4pCJg7UKfJZWDTbYCkpaq3VyR1qKC9eunOQ+ZWdjIA5h7ZR2fO9VnYn6w0q5SEGL1d2hRG3p1iQOG5py6uAn0YIoSX0eXwT0+sQC8L5gQnCIFiT5u3FIA3XFS0h8d2a08S0XWT0IwEtQV7g6aGOry+6c0U6SExIBLLNoKj0VoE9wMA32a0vPY4uQhMp512Nw9dOj4g1lc6T1H2d7OxHkOCzKK6F35eKs1X8uBI5vBVeDyWz6xSEie6Yxo19vAgAAAABJRU5ErkJggg==" />
-  <link rel="shortcut icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAADs+ElEQVR4nOy9d7wdR3n//56Z3T319nt11XuxJEuWZbl33MHGVBvbgIEvJRBqQvIlCSUkIfwIJYEkfENIgEBCCITQjG1wxd1yldV7L7e3U3d3Zn5/zJ5zj2QZbCMRjO6j1+iesmd3Z3bmmad8nucR1lrLBE3QBJ2QJP+3b2CCJmiC/vdoggFM0ASdwDTBACZogk5gmmAAEzRBJzBNMIAJmqATmCYYwARN0AlMEwxggiboBKYJBjBBE3QC0wQDmKAJOoFpggFM0ASdwDTBACZogk5gmmAAEzRBJzBNMIAJmqATmCYYwARN0AlMEwxggiboBKYJBjBBE3QC0wQDmKAJOoFpggFM0ASdwDTBACZogk5gmmAAEzRBJzBNMIAJmqATmCYYwARN0AlMEwxggiboBKYJPT+bm+ytKYvdD4nSNrXoA1ENGBdffvHnHZx5ueTKvUZgZVa1WqSnlhZ4dROlQ6Akq1eT58+VJMc8Ts3fu/PgFZtwNVrK5qXIWJSNACodK1a3E3R+S6Z7La70lQDAzt3qGPY1x8+e3dSC77rjeszX3p5Dm9G7l+N0/gujZWz/G8OT25j12dM57L+H4PItqCxTOiVNlUArjEMR43V8/Y9YUBLnLXVqtlktjQH8kRJEuxA/DRPMjdGkl6L6I0YBYiVuo36hPHLh/egnFpNkgqEku5u8F4t69+6r8OWZZ9bBr+Pl13xX3a5L/lcTff+fMqt1+2/F4izo9/49Yvu9W3kccDaUtk9Ea+6m3PDSgEwrQsdv4+pBdpQoFUSwDLtyA69WrTOd9PE+I3COyBxcGnPnj33RTOqvXsa9euXI3j7xw0ALjP0TBVwTATQ4R7e8EvVJra3RzW8yJi2lewhJxIbLat261VGw3Bmo0pkEm3b55lBNWYbp1a0yGjI6B3Lz7g9LQx9PeeKBXbI8Z4BxPs3lXdF9hS5wML+Z3n9HBxDfii4zEMR9gBS4869DlWV0SCLG7C3i24ewQOXN/fXC8A2CmmiADzT0pMKxPJ63T1Tyc0/s5S3IHzNvjPmswF39g0LGWKF3l60sc6cBzFWo5bXOqQd0NPglrHrz0WTKmY/JJlqJaS5TqAqWOJCVD9Ytk65wEbhSkY7R5Z0euYiTQUhvJ8sP6k0kAukLfotEIKcA2zEiu0u0Ai2ZjE+gGstQTOmJQ+T0MW+7J3jnlyw9rqjB0A5GDmj9o6v26gE8Dkd1QlyWGQqIf/0wdp2fqT/TBqbvH6T/NR8aFuzOAmUfbMvAJSrwr7PKB4L86i67diG3I7hYm+Y8rVE2rXqwVNPX+tq+UGtW7EblPh+BICCy8r6986N5kB8vD3AxW8JQhVPCT90GnkAkQVRxJLX1/OuKjjFkWeoJgjK7PPmIZnI4pCJg7UKfJZWDTbYCkpaq3VyR1qKC9eunOQ+ZWdjIA5h7ZR2fO9VnYn6w0q5SEGL1d2hRG3p1iQOG5py6uAn0YIoSX0eXwT0+sQC8L5gQnCIFiT5u3FIA3XFS0h8d2a08S0XWT0IwEtQV7g6aGOry+6c0U6SExIBLLNoKj0VoE9wMA32a0vPY4uQhMp512Nw9dOj4g1lc6T1H2d7OxHkOCzKK6F35eKs1X8uBI5vBVeDyWz6xSEie6Yxo19vAgAAAABJRU5ErkJggg==" />
+  <link rel="icon" type="image/png" href="mtc-logo.png" />
+  <link rel="shortcut icon" type="image/png" href="mtc-logo.png" />
+  <link rel="apple-touch-icon" href="mtc-logo.png" />
   <style>
     :root {
       color-scheme: dark;
@@ -65,19 +65,20 @@
       display: flex;
       align-items: flex-start;
     }
-    video,
-    iframe {
+    video {
       width: 100%;
       height: 220px;
-      object-fit: contain;
+      object-fit: cover;
       display: block;
       background: #000;
       margin-top: 10px;
       flex-shrink: 0;
-      border: none;
     }
     .meta {
-      display: none;
+      padding: 12px 14px 14px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: auto;
     }
     .back-link {
       display: inline-block;
@@ -189,11 +190,6 @@
           <source src="https://github.com/chandruchandru6781-lab/MTC/raw/main/Videos/driver%20day.mp4" type="video/mp4" />
         </video>
         <div class="meta">MP4 • Direct playback</div>
-      </div>
-
-      <div class="card">
-        <h3>MTC Conductor Anbazhagan sir</h3>
-        <iframe src="https://www.youtube.com/embed/q6JNA0CMwOU" title="MTC Conductor Anbazhagan sir" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
     </div>
   </div>
