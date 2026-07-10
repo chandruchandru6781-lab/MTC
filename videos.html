@@ -233,7 +233,7 @@
       <div class="card">
         <h3>MTC Driver rescue passenger life</h3>
         <div class="card-media">
-          <video controls preload="metadata">
+          <video controls preload="metadata" playsinline webkit-playsinline>
             <source src="Videos/MTC Driver rescue passenger life.mp4" type="video/mp4" />
             <source src="https://github.com/chandruchandru6781-lab/MTC/raw/main/Videos/MTC%20Driver%20rescue%20passenger%20life.mp4" type="video/mp4" />
           </video>
@@ -244,7 +244,7 @@
       <div class="card">
         <h3>MTC conductor Babu helping</h3>
         <div class="card-media">
-          <video controls preload="metadata">
+          <video controls preload="metadata" playsinline webkit-playsinline>
             <source src="Videos/MTC conductor Babu helping.mp4" type="video/mp4" />
             <source src="https://github.com/chandruchandru6781-lab/MTC/raw/main/Videos/MTC%20conductor%20Babu%20helping.mp4" type="video/mp4" />
           </video>
@@ -255,7 +255,7 @@
       <div class="card">
         <h3>MTC lioness</h3>
         <div class="card-media">
-          <video controls preload="metadata">
+          <video controls preload="metadata" playsinline webkit-playsinline>
             <source src="Videos/MTC lioness.mp4" type="video/mp4" />
             <source src="https://github.com/chandruchandru6781-lab/MTC/raw/main/Videos/MTC%20lioness.mp4" type="video/mp4" />
           </video>
@@ -266,7 +266,7 @@
       <div class="card">
         <h3>SETC Dvr Con Returned lost bag</h3>
         <div class="card-media">
-          <video controls preload="metadata">
+          <video controls preload="metadata" playsinline webkit-playsinline>
             <source src="Videos/SETC Dvr Con Returned lost bag.mp4" type="video/mp4" />
             <source src="https://github.com/chandruchandru6781-lab/MTC/raw/main/Videos/SETC%20Dvr%20Con%20Returned%20lost%20bag.mp4" type="video/mp4" />
           </video>
@@ -277,7 +277,7 @@
       <div class="card">
         <h3>Student Encourage speech of Dvr nd Con</h3>
         <div class="card-media">
-          <video controls preload="metadata">
+          <video controls preload="metadata" playsinline webkit-playsinline>
             <source src="Videos/Student Encourage speech of Dvr nd Con.mp4" type="video/mp4" />
             <source src="https://github.com/chandruchandru6781-lab/MTC/raw/main/Videos/Student%20Encourage%20speech%20of%20Dvr%20nd%20Con.mp4" type="video/mp4" />
           </video>
@@ -288,7 +288,7 @@
       <div class="card">
         <h3>TNSTC Con Helped grandma</h3>
         <div class="card-media">
-          <video controls preload="metadata">
+          <video controls preload="metadata" playsinline webkit-playsinline>
             <source src="Videos/TNSTC Con Helped grandma.mp4" type="video/mp4" />
             <source src="https://github.com/chandruchandru6781-lab/MTC/raw/main/Videos/TNSTC%20Con%20Helped%20grandma.mp4" type="video/mp4" />
           </video>
@@ -299,8 +299,8 @@
       <div class="card">
         <h3>TNSTC Dvr &amp; con Helping girl</h3>
         <div class="card-media">
-          <video controls preload="metadata">
-            <source src="Videos/TNSTC Dvr & con Helping girl.mp4" type="video/mp4" />
+          <video controls preload="metadata" playsinline webkit-playsinline>
+            <source src="Videos/TNSTC Dvr &amp; con Helping girl.mp4" type="video/mp4" />
             <source src="https://github.com/chandruchandru6781-lab/MTC/raw/main/Videos/TNSTC%20Dvr%20%26%20con%20Helping%20girl.mp4" type="video/mp4" />
           </video>
         </div>
@@ -310,7 +310,7 @@
       <div class="card">
         <h3>Womens day</h3>
         <div class="card-media">
-          <video controls preload="metadata">
+          <video controls preload="metadata" playsinline webkit-playsinline>
             <source src="Videos/Womens day.mp4" type="video/mp4" />
             <source src="https://github.com/chandruchandru6781-lab/MTC/raw/main/Videos/Womens%20day.mp4" type="video/mp4" />
           </video>
@@ -321,7 +321,7 @@
       <div class="card">
         <h3>bus fiirst</h3>
         <div class="card-media">
-          <video controls preload="metadata">
+          <video controls preload="metadata" playsinline webkit-playsinline>
             <source src="Videos/bus fiirst.mp4" type="video/mp4" />
             <source src="https://github.com/chandruchandru6781-lab/MTC/raw/main/Videos/bus%20fiirst.mp4" type="video/mp4" />
           </video>
@@ -332,7 +332,7 @@
       <div class="card">
         <h3>driver day</h3>
         <div class="card-media">
-          <video controls preload="metadata">
+          <video controls preload="metadata" playsinline webkit-playsinline>
             <source src="Videos/driver day.mp4" type="video/mp4" />
             <source src="https://github.com/chandruchandru6781-lab/MTC/raw/main/Videos/driver%20day.mp4" type="video/mp4" />
           </video>
@@ -349,5 +349,112 @@
       </div>
     </div>
   </div>
+
+  <style>
+    .video-status {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: rgba(6, 11, 22, 0.82);
+      color: var(--muted);
+      font-size: 0.85rem;
+      z-index: 2;
+      text-align: center;
+      padding: 12px;
+    }
+    .video-status.show { display: flex; }
+    .video-status .spinner {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2.5px solid rgba(148, 163, 184, 0.25);
+      border-top-color: var(--accent);
+      animation: video-spin 0.8s linear infinite;
+    }
+    .video-status button {
+      margin-top: 2px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent-3);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    @keyframes video-spin { to { transform: rotate(360deg); } }
+  </style>
+
+  <script>
+    // Videos are served from a same-origin /Videos folder with a GitHub raw URL as
+    // a fallback <source>. The raw.githubusercontent.com fallback is not a real CDN
+    // and occasionally throttles or briefly 404s, which is why a video sometimes
+    // needs a manual page refresh to start playing. This retries automatically
+    // in-place instead of making the visitor reload the whole page.
+    document.querySelectorAll('.card-media').forEach(function (card) {
+      var video = card.querySelector('video');
+      if (!video) return;
+
+      var status = document.createElement('div');
+      status.className = 'video-status';
+      status.innerHTML = '<div class="spinner"></div><span class="video-status-text">Loading video…</span>';
+      card.appendChild(status);
+
+      var textEl = status.querySelector('.video-status-text');
+      var spinnerEl = status.querySelector('.spinner');
+      var attempts = 0;
+      var maxAutoAttempts = 4;
+      var retryTimer = null;
+
+      function showRetrying() {
+        spinnerEl.style.display = '';
+        var btn = status.querySelector('button');
+        if (btn) btn.remove();
+        textEl.textContent = 'Reconnecting…';
+        status.classList.add('show');
+      }
+
+      function showManualRetry() {
+        spinnerEl.style.display = 'none';
+        textEl.textContent = "Couldn't load this video.";
+        if (!status.querySelector('button')) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.textContent = 'Tap to retry';
+          btn.onclick = function () {
+            attempts = 0;
+            showRetrying();
+            video.load();
+          };
+          status.appendChild(btn);
+        }
+        status.classList.add('show');
+      }
+
+      function hideStatus() {
+        status.classList.remove('show');
+      }
+
+      video.addEventListener('error', function () {
+        attempts++;
+        if (attempts <= maxAutoAttempts) {
+          showRetrying();
+          clearTimeout(retryTimer);
+          retryTimer = setTimeout(function () {
+            video.load();
+          }, Math.min(1200 * attempts, 4000));
+        } else {
+          showManualRetry();
+        }
+      }, true); // error events on media elements don't bubble, so listen directly
+
+      video.addEventListener('loadeddata', hideStatus);
+      video.addEventListener('playing', hideStatus);
+    });
+  </script>
 </body>
 </html>
