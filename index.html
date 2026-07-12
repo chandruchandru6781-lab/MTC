@@ -6071,10 +6071,32 @@
                     document.getElementById('videoSource').src = randomVideo;
                     const videoPlayer = document.getElementById('videoPlayer');
                     if (videoPlayer) {
+                        // Ensure the player starts loading
                         videoPlayer.load();
                     }
-                    document.getElementById('videoModal').classList.add('active');
-                    
+                    const videoModal = document.getElementById('videoModal');
+                    videoModal.classList.add('active');
+
+                    // Show reconnecting/status overlay immediately
+                    const statusOverlay = document.getElementById('videoModalStatus');
+                    const statusText = document.getElementById('videoModalStatusText');
+                    if (statusOverlay && statusText) {
+                        statusText.textContent = 'Loading video…';
+                        statusOverlay.classList.add('show');
+                      }
+
+                    // Try to auto-play and attach reconnect logic from playVideoNow
+                    // small delay to allow the source/load to take effect
+                    setTimeout(() => {
+                        try {
+                            if (typeof playVideoNow === 'function') {
+                                playVideoNow();
+                            }
+                        } catch (e) {
+                            console.error('Auto play invocation failed', e);
+                        }
+                    }, 150);
+
                     // Mark that we need to advance after video
                     window.pendingQuestionAdvance = true;
                     return;
