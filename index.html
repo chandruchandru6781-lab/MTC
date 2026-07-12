@@ -1325,6 +1325,7 @@
             margin-bottom: 20px;
             background: #f0f0f0;
             aspect-ratio: 16/9;
+            position: relative;
         }
 
         .video-container video {
@@ -1332,6 +1333,49 @@
             height: 100%;
             object-fit: contain;
         }
+
+        .video-status-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            color: #f8fafc;
+            font-size: 0.95rem;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            gap: 12px;
+            flex-direction: column;
+            z-index: 20;
+        }
+
+        .video-status-overlay.show {
+            display: flex;
+        }
+
+        .video-status-overlay .spinner {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.25);
+            border-top-color: #ffffff;
+            animation: video-spin 0.8s linear infinite;
+        }
+
+        .video-status-overlay button {
+            margin-top: 8px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        @keyframes video-spin { to { transform: rotate(360deg); } }
 
         .video-modal-buttons {
             display: flex;
@@ -7074,6 +7118,74 @@
             videoPlayer.parentNode.replaceChild(newPlayer, videoPlayer);
             
             const updatedPlayer = document.getElementById('videoPlayer');
+            const statusOverlay = document.getElementById('videoModalStatus');
+            const statusText = document.getElementById('videoModalStatusText');
+            let attempts = 0;
+            const maxAutoAttempts = 4;
+            let retryTimer = null;
+
+            function hideVideoModalStatus() {
+                if (retryTimer) {
+                    clearTimeout(retryTimer);
+                    retryTimer = null;
+                }
+                if (statusOverlay) {
+                    statusOverlay.classList.remove('show');
+                    const retryBtn = statusOverlay.querySelector('button');
+                    if (retryBtn) retryBtn.remove();
+                }
+            }
+
+            function showVideoRetrying() {
+                if (!statusOverlay || !statusText) return;
+                statusText.textContent = 'Reconnecting…';
+                statusOverlay.classList.add('show');
+                const retryBtn = statusOverlay.querySelector('button');
+                if (retryBtn) retryBtn.remove();
+            }
+
+            function showVideoManualRetry() {
+                if (!statusOverlay || !statusText) return;
+                statusText.textContent = "Couldn't load this video.";
+                statusOverlay.classList.add('show');
+                if (!statusOverlay.querySelector('button')) {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.textContent = 'Tap to retry';
+                    btn.onclick = function () {
+                        attempts = 0;
+                        showVideoRetrying();
+                        updatedPlayer.load();
+                        const playPromise = updatedPlayer.play();
+                        if (playPromise !== undefined) {
+                            playPromise.catch(() => {});
+                        }
+                    };
+                    statusOverlay.appendChild(btn);
+                }
+            }
+
+            updatedPlayer.addEventListener('error', function () {
+                attempts++;
+                if (attempts <= maxAutoAttempts) {
+                    showVideoRetrying();
+                    if (retryTimer) {
+                        clearTimeout(retryTimer);
+                    }
+                    retryTimer = setTimeout(function () {
+                        updatedPlayer.load();
+                        const playPromise = updatedPlayer.play();
+                        if (playPromise !== undefined) {
+                            playPromise.catch(() => {});
+                        }
+                    }, Math.min(1200 * attempts, 4000));
+                } else {
+                    showVideoManualRetry();
+                }
+            }, true);
+
+            updatedPlayer.addEventListener('loadeddata', hideVideoModalStatus);
+            updatedPlayer.addEventListener('playing', hideVideoModalStatus);
             
             // Attempt to play
             const playPromise = updatedPlayer.play();
@@ -7137,11 +7249,17 @@
                 modal.classList.remove('active');
             }
             
-            // Stop video
+            // Stop video and clear status
             const videoPlayer = document.getElementById('videoPlayer');
+            const statusOverlay = document.getElementById('videoModalStatus');
             if (videoPlayer) {
                 videoPlayer.pause();
                 videoPlayer.currentTime = 0;
+            }
+            if (statusOverlay) {
+                statusOverlay.classList.remove('show');
+                const retryBtn = statusOverlay.querySelector('button');
+                if (retryBtn) retryBtn.remove();
             }
             
             // Advance to next question
@@ -7764,6 +7882,10 @@
                     <source id="videoSource" src="" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
+                <div id="videoModalStatus" class="video-status-overlay" aria-live="polite">
+                    <div class="spinner"></div>
+                    <span id="videoModalStatusText">Loading video…</span>
+                </div>
             </div>
             <div class="video-modal-buttons">
                 <button class="video-play-btn" onclick="playVideoNow()">▶️ Play Now</button>
