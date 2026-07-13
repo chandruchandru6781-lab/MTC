@@ -6069,11 +6069,6 @@
                 if (randomVideo) {
                     // Show video modal
                     document.getElementById('videoSource').src = randomVideo;
-                    const videoPlayer = document.getElementById('videoPlayer');
-                    if (videoPlayer) {
-                        // Ensure the player starts loading
-                        videoPlayer.load();
-                    }
                     const videoModal = document.getElementById('videoModal');
                     videoModal.classList.add('active');
 
@@ -6083,10 +6078,9 @@
                     if (statusOverlay && statusText) {
                         statusText.textContent = 'Loading video…';
                         statusOverlay.classList.add('show');
-                      }
+                    }
 
                     // Try to auto-play and attach reconnect logic from playVideoNow
-                    // small delay to allow the source/load to take effect
                     setTimeout(() => {
                         try {
                             if (typeof playVideoNow === 'function') {
@@ -7208,6 +7202,9 @@
 
             updatedPlayer.addEventListener('loadeddata', hideVideoModalStatus);
             updatedPlayer.addEventListener('playing', hideVideoModalStatus);
+
+            // Load video so status and retry handlers are active before playback begins
+            updatedPlayer.load();
             
             // Attempt to play
             const playPromise = updatedPlayer.play();
