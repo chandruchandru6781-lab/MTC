@@ -7129,16 +7129,25 @@
                 return;
             }
             
-            // Remove previous event listeners to avoid duplicates
-            const newPlayer = videoPlayer.cloneNode(true);
-            videoPlayer.parentNode.replaceChild(newPlayer, videoPlayer);
-            
-            const updatedPlayer = document.getElementById('videoPlayer');
+            const savedTime = videoPlayer.currentTime || 0;
             const statusOverlay = document.getElementById('videoModalStatus');
             const statusText = document.getElementById('videoModalStatusText');
             let attempts = 0;
             const maxAutoAttempts = 4;
             let retryTimer = null;
+
+            // Remove previous event listeners to avoid duplicates
+            const newPlayer = videoPlayer.cloneNode(true);
+            videoPlayer.parentNode.replaceChild(newPlayer, videoPlayer);
+            
+            const updatedPlayer = document.getElementById('videoPlayer');
+            if (savedTime > 0) {
+                try {
+                    updatedPlayer.currentTime = savedTime;
+                } catch (e) {
+                    console.warn('Could not restore saved time:', e);
+                }
+            }
 
             function hideVideoModalStatus() {
                 if (retryTimer) {
