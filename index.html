@@ -7470,16 +7470,84 @@
                 console.error('Gallery video player not found');
                 return;
             }
-            
+
             // Remove previous event listeners to avoid duplicates
             const newPlayer = videoPlayer.cloneNode(true);
             videoPlayer.parentNode.replaceChild(newPlayer, videoPlayer);
-            
+
             const updatedPlayer = document.getElementById('galleryVideoPlayer');
-            
-            // Attempt to play
+            const statusOverlay = document.getElementById('galleryVideoModalStatus');
+            const statusText = document.getElementById('galleryVideoModalStatusText');
+            let attempts = 0;
+            const maxAutoAttempts = 4;
+            let retryTimer = null;
+
+            function hideGalleryStatus() {
+                if (retryTimer) {
+                    clearTimeout(retryTimer);
+                    retryTimer = null;
+                }
+                if (statusOverlay) {
+                    statusOverlay.classList.remove('show');
+                    const retryBtn = statusOverlay.querySelector('button');
+                    if (retryBtn) retryBtn.remove();
+                }
+            }
+
+            function showGalleryRetrying() {
+                if (!statusOverlay || !statusText) return;
+                statusText.textContent = 'Reconnecting…';
+                statusOverlay.classList.add('show');
+                const retryBtn = statusOverlay.querySelector('button');
+                if (retryBtn) retryBtn.remove();
+            }
+
+            function showGalleryManualRetry() {
+                if (!statusOverlay || !statusText) return;
+                statusText.textContent = "Couldn't load this video.";
+                statusOverlay.classList.add('show');
+                if (!statusOverlay.querySelector('button')) {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.textContent = 'Tap to retry';
+                    btn.onclick = function () {
+                        attempts = 0;
+                        showGalleryRetrying();
+                        updatedPlayer.load();
+                        const playPromise = updatedPlayer.play();
+                        if (playPromise !== undefined) {
+                            playPromise.catch(() => {});
+                        }
+                    };
+                    statusOverlay.appendChild(btn);
+                }
+            }
+
+            updatedPlayer.addEventListener('error', function () {
+                attempts++;
+                if (attempts <= maxAutoAttempts) {
+                    showGalleryRetrying();
+                    if (retryTimer) {
+                        clearTimeout(retryTimer);
+                    }
+                    retryTimer = setTimeout(function () {
+                        updatedPlayer.load();
+                        const playPromise = updatedPlayer.play();
+                        if (playPromise !== undefined) {
+                            playPromise.catch(() => {});
+                        }
+                    }, Math.min(1200 * attempts, 4000));
+                } else {
+                    showGalleryManualRetry();
+                }
+            }, true);
+
+            updatedPlayer.addEventListener('loadeddata', hideGalleryStatus);
+            updatedPlayer.addEventListener('playing', hideGalleryStatus);
+
+            updatedPlayer.load();
             const playPromise = updatedPlayer.play();
-            
+
             if (playPromise !== undefined) {
                 playPromise
                     .then(() => {
@@ -7925,6 +7993,10 @@
                     Your browser does not support the video tag.
                 </video>
                 <iframe id="galleryDriveFrame" src="" style="display:none; width:100%; height:100%; border:0;" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+                <div id="galleryVideoModalStatus" class="video-status-overlay" aria-live="polite">
+                    <div class="spinner"></div>
+                    <span id="galleryVideoModalStatusText">Loading video…</span>
+                </div>
             </div>
             <div class="video-modal-buttons">
                 <button class="video-play-btn" onclick="playGalleryVideoNow()">▶️ Play Now</button>
