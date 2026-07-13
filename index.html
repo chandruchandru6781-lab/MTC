@@ -6068,7 +6068,12 @@
                 
                 if (randomVideo) {
                     // Show video modal
-                    document.getElementById('videoSource').src = randomVideo;
+                    const videoPlayer = document.getElementById('videoPlayer');
+                    const encodedVideo = encodeURI(randomVideo);
+                    document.getElementById('videoSource').src = encodedVideo;
+                    if (videoPlayer) {
+                        videoPlayer.src = encodedVideo;
+                    }
                     const videoModal = document.getElementById('videoModal');
                     videoModal.classList.add('active');
 
@@ -7141,6 +7146,12 @@
             videoPlayer.parentNode.replaceChild(newPlayer, videoPlayer);
             
             const updatedPlayer = document.getElementById('videoPlayer');
+            if (updatedPlayer) {
+                const sourceEl = updatedPlayer.querySelector('source');
+                if (sourceEl && sourceEl.src) {
+                    updatedPlayer.src = sourceEl.src;
+                }
+            }
             if (savedTime > 0) {
                 try {
                     updatedPlayer.currentTime = savedTime;
@@ -7417,10 +7428,12 @@
             
             // Open gallery video modal with selected video
             const videoSource = document.getElementById('galleryVideoSource');
-            videoSource.src = videoSrc;
+            const encodedVideo = encodeURI(videoSrc);
+            videoSource.src = encodedVideo;
             
             const videoPlayer = document.getElementById('galleryVideoPlayer');
             if (videoPlayer) {
+                videoPlayer.src = encodedVideo;
                 videoPlayer.load();
             }
             
@@ -7974,7 +7987,7 @@
                 <h3>🎬 Great Progress! Watch a Video</h3>
             </div>
             <div class="video-container">
-                <video id="videoPlayer" controls>
+                <video id="videoPlayer" controls playsinline webkit-playsinline>
                     <source id="videoSource" src="" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
@@ -7997,7 +8010,7 @@
                 <h3>🎬 Video Player</h3>
             </div>
             <div class="video-container">
-                <video id="galleryVideoPlayer" controls>
+                <video id="galleryVideoPlayer" controls playsinline webkit-playsinline>
                     <source id="galleryVideoSource" src="" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
