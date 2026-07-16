@@ -7225,6 +7225,7 @@
                         console.log('Video autoplay failed. User can still click play on video controls.');
                     });
             }
+        }
 
         function backToVideoGallery() {
             // Close the gallery video modal
@@ -7280,6 +7281,10 @@
                 window.pendingQuestionAdvance = false;
                 advanceToNextQuestion();
             }
+        }
+
+        function skipVideoForNow() {
+            proceedAfterVideo();
         }
 
         function closeVideoModal() {
@@ -7955,6 +7960,7 @@
         <div class="video-modal-content">
             <div class="video-modal-header">
                 <h3>🎬 Great Progress! Watch a Video</h3>
+                <button class="close-modal-btn" onclick="closeVideoModal()">✕</button>
             </div>
             <div class="video-container">
                 <video id="videoPlayer" controls preload="auto" playsinline webkit-playsinline>
