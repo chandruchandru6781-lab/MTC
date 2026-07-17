@@ -6024,7 +6024,7 @@
                 
                 if (randomVideo) {
                     // Show video modal
-                    document.getElementById('videoSource').src = getEncodedVideoSrc(randomVideo);
+                    setAutoVideoModalSources(randomVideo);
                     const videoPlayer = document.getElementById('videoPlayer');
                     if (videoPlayer) {
                         videoPlayer.load();
@@ -7082,6 +7082,28 @@
             }
         }
 
+        function getGitHubRawVideoSrc(videoSrc) {
+            if (!videoSrc) {
+                return videoSrc;
+            }
+
+            const fileName = videoSrc.split('/').pop();
+            return `https://github.com/chandruchandru6781-lab/MTC/raw/main/Videos/${encodeURIComponent(fileName)}`;
+        }
+
+        function setAutoVideoModalSources(videoSrc) {
+            const mainSource = document.getElementById('videoSource');
+            const fallbackSource = document.getElementById('videoFallbackSource');
+
+            if (mainSource) {
+                mainSource.src = getEncodedVideoSrc(videoSrc);
+            }
+
+            if (fallbackSource) {
+                fallbackSource.src = getGitHubRawVideoSrc(videoSrc);
+            }
+        }
+
         function playVideoNow() {
             const videoPlayer = document.getElementById('videoPlayer');
             if (!videoPlayer) {
@@ -7788,6 +7810,7 @@
             <div class="video-container">
                 <video id="videoPlayer" controls>
                     <source id="videoSource" src="" type="video/mp4">
+                    <source id="videoFallbackSource" src="" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
