@@ -7197,8 +7197,23 @@
                 }
             }
 
+            function attemptPlay() {
+                if (!statusOverlay || !statusText) return;
+                hideVideoModalStatus();
+                const playPromise = videoPlayer.play();
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => {
+                            console.log('Video playing');
+                        })
+                        .catch(err => {
+                            console.error('Play error:', err);
+                            console.log('Video autoplay failed. User can still click play on video controls.');
+                        });
+                }
+            }
+
             videoPlayer.onerror = onVideoError;
-            videoPlayer.onloadeddata = hideVideoModalStatus;
             videoPlayer.onplaying = hideVideoModalStatus;
             videoPlayer.onended = function () {
                 proceedAfterVideo();
@@ -7212,19 +7227,8 @@
                 };
             }
 
+            videoPlayer.addEventListener('loadeddata', attemptPlay, { once: true });
             videoPlayer.load();
-
-            const playPromise = videoPlayer.play();
-            if (playPromise !== undefined) {
-                playPromise
-                    .then(() => {
-                        console.log('Video playing');
-                    })
-                    .catch(err => {
-                        console.error('Play error:', err);
-                        console.log('Video autoplay failed. User can still click play on video controls.');
-                    });
-            }
         }
 
         function backToVideoGallery() {
