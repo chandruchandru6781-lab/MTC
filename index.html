@@ -6024,7 +6024,8 @@
                 
                 if (randomVideo) {
                     // Show video modal
-                    document.getElementById('videoSource').src = randomVideo;
+                    const encodedVideo = encodeURI(randomVideo);
+                    document.getElementById('videoSource').src = encodedVideo;
                     const videoPlayer = document.getElementById('videoPlayer');
                     if (videoPlayer) {
                         videoPlayer.load();
@@ -7062,6 +7063,26 @@
             return availableVideos[randomIndex];
         }
 
+        function getEncodedVideoSrc(videoSrc) {
+            if (!videoSrc) {
+                return videoSrc;
+            }
+
+            try {
+                const url = new URL(videoSrc, document.baseURI);
+                const encodedPath = url.pathname
+                    .split('/')
+                    .map(segment => encodeURIComponent(decodeURIComponent(segment)))
+                    .join('/');
+                url.pathname = encodedPath;
+                return url.href;
+            } catch (err) {
+                return videoSrc.split('/')
+                    .map(segment => encodeURIComponent(decodeURIComponent(segment)))
+                    .join('/');
+            }
+        }
+
         function playVideoNow() {
             const videoPlayer = document.getElementById('videoPlayer');
             if (!videoPlayer) {
@@ -7074,6 +7095,9 @@
             videoPlayer.parentNode.replaceChild(newPlayer, videoPlayer);
             
             const updatedPlayer = document.getElementById('videoPlayer');
+            if (updatedPlayer) {
+                updatedPlayer.load();
+            }
             
             // Attempt to play
             const playPromise = updatedPlayer.play();
@@ -7251,7 +7275,7 @@
                 ctx.fillText('🎬', canvas.width / 2, canvas.height / 2);
             });
             
-            video.src = videoSrc;
+            video.src = getEncodedVideoSrc(videoSrc);
         }
 
         function playSelectedVideo(videoSrc) {
@@ -7271,7 +7295,7 @@
             
             // Open gallery video modal with selected video
             const videoSource = document.getElementById('galleryVideoSource');
-            videoSource.src = videoSrc;
+            videoSource.src = getEncodedVideoSrc(videoSrc);
             
             const videoPlayer = document.getElementById('galleryVideoPlayer');
             if (videoPlayer) {
@@ -7339,6 +7363,9 @@
             videoPlayer.parentNode.replaceChild(newPlayer, videoPlayer);
             
             const updatedPlayer = document.getElementById('galleryVideoPlayer');
+            if (updatedPlayer) {
+                updatedPlayer.load();
+            }
             
             // Attempt to play
             const playPromise = updatedPlayer.play();
