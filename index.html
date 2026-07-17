@@ -6024,8 +6024,7 @@
                 
                 if (randomVideo) {
                     // Show video modal
-                    const encodedVideo = encodeURI(randomVideo);
-                    document.getElementById('videoSource').src = encodedVideo;
+                    document.getElementById('videoSource').src = getEncodedVideoSrc(randomVideo);
                     const videoPlayer = document.getElementById('videoPlayer');
                     if (videoPlayer) {
                         videoPlayer.load();
