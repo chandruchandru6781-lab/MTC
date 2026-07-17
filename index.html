@@ -1325,7 +1325,6 @@
             margin-bottom: 20px;
             background: #f0f0f0;
             aspect-ratio: 16/9;
-            position: relative;
         }
 
         .video-container video {
@@ -1333,49 +1332,6 @@
             height: 100%;
             object-fit: contain;
         }
-
-        .video-status-overlay {
-            display: none;
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.65);
-            color: #f8fafc;
-            font-size: 0.95rem;
-            text-align: center;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            gap: 12px;
-            flex-direction: column;
-            z-index: 20;
-        }
-
-        .video-status-overlay.show {
-            display: flex;
-        }
-
-        .video-status-overlay .spinner {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.25);
-            border-top-color: #ffffff;
-            animation: video-spin 0.8s linear infinite;
-        }
-
-        .video-status-overlay button {
-            margin-top: 8px;
-            padding: 8px 16px;
-            border-radius: 999px;
-            border: 1px solid rgba(255, 255, 255, 0.35);
-            background: rgba(255, 255, 255, 0.12);
-            color: #ffffff;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        @keyframes video-spin { to { transform: rotate(360deg); } }
 
         .video-modal-buttons {
             display: flex;
@@ -6068,26 +6024,13 @@
                 
                 if (randomVideo) {
                     // Show video modal
+                    document.getElementById('videoSource').src = randomVideo;
                     const videoPlayer = document.getElementById('videoPlayer');
-                    const encodedVideo = encodeVideoPath(randomVideo);
-                    document.getElementById('videoSource').src = encodedVideo;
                     if (videoPlayer) {
-                        videoPlayer.src = encodedVideo;
+                        videoPlayer.load();
                     }
-                    const videoModal = document.getElementById('videoModal');
-                    videoModal.classList.add('active');
-
-                    // Try to auto-play on desktop, but do not show the reconnect overlay until an actual error occurs.
-                    setTimeout(() => {
-                        try {
-                            if (typeof playVideoNow === 'function') {
-                                playVideoNow();
-                            }
-                        } catch (e) {
-                            console.error('Auto play invocation failed', e);
-                        }
-                    }, 150);
-
+                    document.getElementById('videoModal').classList.add('active');
+                    
                     // Mark that we need to advance after video
                     window.pendingQuestionAdvance = true;
                     return;
@@ -7119,116 +7062,43 @@
             return availableVideos[randomIndex];
         }
 
-        function encodeVideoPath(path) {
-            return path.split('/').map(encodeURIComponent).join('/');
-        }
-
         function playVideoNow() {
             const videoPlayer = document.getElementById('videoPlayer');
             if (!videoPlayer) {
                 console.error('Video player not found');
                 return;
             }
-
-            const savedTime = videoPlayer.currentTime || 0;
-            const statusOverlay = document.getElementById('videoModalStatus');
-            const statusText = document.getElementById('videoModalStatusText');
-            let attempts = 0;
-            const maxAutoAttempts = 4;
-            let retryTimer = null;
-
-            function hideVideoModalStatus() {
-                if (retryTimer) {
-                    clearTimeout(retryTimer);
-                    retryTimer = null;
-                }
-                if (statusOverlay) {
-                    statusOverlay.classList.remove('show');
-                    const retryBtn = statusOverlay.querySelector('button');
-                    if (retryBtn) retryBtn.remove();
-                }
+            
+            // Remove previous event listeners to avoid duplicates
+            const newPlayer = videoPlayer.cloneNode(true);
+            videoPlayer.parentNode.replaceChild(newPlayer, videoPlayer);
+            
+            const updatedPlayer = document.getElementById('videoPlayer');
+            
+            // Attempt to play
+            const playPromise = updatedPlayer.play();
+            
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        console.log('Video playing');
+                    })
+                    .catch(err => {
+                        console.error('Play error:', err);
+                        // If autoplay fails, show message and allow skip
+                        console.log('Video autoplay failed. User can still click play on video controls.');
+                    });
             }
-
-            function showVideoRetrying() {
-                if (!statusOverlay || !statusText) return;
-                statusText.textContent = 'Reconnecting…';
-                statusOverlay.classList.add('show');
-                const retryBtn = statusOverlay.querySelector('button');
-                if (retryBtn) retryBtn.remove();
-            }
-
-            function showVideoManualRetry() {
-                if (!statusOverlay || !statusText) return;
-                statusText.textContent = "Couldn't load this video.";
-                statusOverlay.classList.add('show');
-                if (!statusOverlay.querySelector('button')) {
-                    const btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.textContent = 'Tap to retry';
-                    btn.onclick = function () {
-                        attempts = 0;
-                        showVideoRetrying();
-                        videoPlayer.load();
-                        const playPromise = videoPlayer.play();
-                        if (playPromise !== undefined) {
-                            playPromise.catch(() => {});
-                        }
-                    };
-                    statusOverlay.appendChild(btn);
-                }
-            }
-
-            function onVideoError() {
-                attempts++;
-                if (attempts <= maxAutoAttempts) {
-                    showVideoRetrying();
-                    if (retryTimer) {
-                        clearTimeout(retryTimer);
-                    }
-                    retryTimer = setTimeout(function () {
-                        videoPlayer.load();
-                        const playPromise = videoPlayer.play();
-                        if (playPromise !== undefined) {
-                            playPromise.catch(() => {});
-                        }
-                    }, Math.min(1200 * attempts, 4000));
-                } else {
-                    showVideoManualRetry();
-                }
-            }
-
-            function attemptPlay() {
-                if (!statusOverlay || !statusText) return;
-                hideVideoModalStatus();
-                const playPromise = videoPlayer.play();
-                if (playPromise !== undefined) {
-                    playPromise
-                        .then(() => {
-                            console.log('Video playing');
-                        })
-                        .catch(err => {
-                            console.error('Play error:', err);
-                            console.log('Video autoplay failed. User can still click play on video controls.');
-                        });
-                }
-            }
-
-            videoPlayer.onerror = onVideoError;
-            videoPlayer.onplaying = hideVideoModalStatus;
-            videoPlayer.onended = function () {
+            
+            // Setup end listener
+            updatedPlayer.addEventListener('ended', function() {
                 proceedAfterVideo();
-            };
+            }, { once: true });
+        }
 
-            if (savedTime > 0) {
-                videoPlayer.onloadedmetadata = function () {
-                    if (videoPlayer.duration > savedTime) {
-                        videoPlayer.currentTime = savedTime;
-                    }
-                };
-            }
-
-            videoPlayer.addEventListener('loadeddata', attemptPlay, { once: true });
-            videoPlayer.load();
+        function skipVideoForNow() {
+            // Skip video and proceed to next question
+            proceedAfterVideo();
         }
 
         function backToVideoGallery() {
@@ -7267,17 +7137,11 @@
                 modal.classList.remove('active');
             }
             
-            // Stop video and clear status
+            // Stop video
             const videoPlayer = document.getElementById('videoPlayer');
-            const statusOverlay = document.getElementById('videoModalStatus');
             if (videoPlayer) {
                 videoPlayer.pause();
                 videoPlayer.currentTime = 0;
-            }
-            if (statusOverlay) {
-                statusOverlay.classList.remove('show');
-                const retryBtn = statusOverlay.querySelector('button');
-                if (retryBtn) retryBtn.remove();
             }
             
             // Advance to next question
@@ -7285,10 +7149,6 @@
                 window.pendingQuestionAdvance = false;
                 advanceToNextQuestion();
             }
-        }
-
-        function skipVideoForNow() {
-            proceedAfterVideo();
         }
 
         function closeVideoModal() {
@@ -7301,11 +7161,6 @@
             if (videoPlayer) {
                 videoPlayer.pause();
                 videoPlayer.currentTime = 0;
-            }
-
-            if (window.pendingQuestionAdvance) {
-                window.pendingQuestionAdvance = false;
-                advanceToNextQuestion();
             }
         }
 
@@ -7396,7 +7251,7 @@
                 ctx.fillText('🎬', canvas.width / 2, canvas.height / 2);
             });
             
-            video.src = encodeVideoPath(videoSrc);
+            video.src = videoSrc;
         }
 
         function playSelectedVideo(videoSrc) {
@@ -7416,12 +7271,10 @@
             
             // Open gallery video modal with selected video
             const videoSource = document.getElementById('galleryVideoSource');
-            const encodedVideo = encodeVideoPath(videoSrc);
-            videoSource.src = encodedVideo;
+            videoSource.src = videoSrc;
             
             const videoPlayer = document.getElementById('galleryVideoPlayer');
             if (videoPlayer) {
-                videoPlayer.src = encodedVideo;
                 videoPlayer.load();
             }
             
@@ -7480,80 +7333,16 @@
                 console.error('Gallery video player not found');
                 return;
             }
-
-            const statusOverlay = document.getElementById('galleryVideoModalStatus');
-            const statusText = document.getElementById('galleryVideoModalStatusText');
-            let attempts = 0;
-            const maxAutoAttempts = 4;
-            let retryTimer = null;
-
-            function hideGalleryStatus() {
-                if (retryTimer) {
-                    clearTimeout(retryTimer);
-                    retryTimer = null;
-                }
-                if (statusOverlay) {
-                    statusOverlay.classList.remove('show');
-                    const retryBtn = statusOverlay.querySelector('button');
-                    if (retryBtn) retryBtn.remove();
-                }
-            }
-
-            function showGalleryRetrying() {
-                if (!statusOverlay || !statusText) return;
-                statusText.textContent = 'Reconnecting…';
-                statusOverlay.classList.add('show');
-                const retryBtn = statusOverlay.querySelector('button');
-                if (retryBtn) retryBtn.remove();
-            }
-
-            function showGalleryManualRetry() {
-                if (!statusOverlay || !statusText) return;
-                statusText.textContent = "Couldn't load this video.";
-                statusOverlay.classList.add('show');
-                if (!statusOverlay.querySelector('button')) {
-                    const btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.textContent = 'Tap to retry';
-                    btn.onclick = function () {
-                        attempts = 0;
-                        showGalleryRetrying();
-                        videoPlayer.load();
-                        const playPromise = videoPlayer.play();
-                        if (playPromise !== undefined) {
-                            playPromise.catch(() => {});
-                        }
-                    };
-                    statusOverlay.appendChild(btn);
-                }
-            }
-
-            function onVideoError() {
-                attempts++;
-                if (attempts <= maxAutoAttempts) {
-                    showGalleryRetrying();
-                    if (retryTimer) {
-                        clearTimeout(retryTimer);
-                    }
-                    retryTimer = setTimeout(function () {
-                        videoPlayer.load();
-                        const playPromise = videoPlayer.play();
-                        if (playPromise !== undefined) {
-                            playPromise.catch(() => {});
-                        }
-                    }, Math.min(1200 * attempts, 4000));
-                } else {
-                    showGalleryManualRetry();
-                }
-            }
-
-            videoPlayer.onerror = onVideoError;
-            videoPlayer.onloadeddata = hideGalleryStatus;
-            videoPlayer.onplaying = hideGalleryStatus;
-
-            videoPlayer.load();
-            const playPromise = videoPlayer.play();
-
+            
+            // Remove previous event listeners to avoid duplicates
+            const newPlayer = videoPlayer.cloneNode(true);
+            videoPlayer.parentNode.replaceChild(newPlayer, videoPlayer);
+            
+            const updatedPlayer = document.getElementById('galleryVideoPlayer');
+            
+            // Attempt to play
+            const playPromise = updatedPlayer.play();
+            
             if (playPromise !== undefined) {
                 playPromise
                     .then(() => {
@@ -7969,17 +7758,12 @@
         <div class="video-modal-content">
             <div class="video-modal-header">
                 <h3>🎬 Great Progress! Watch a Video</h3>
-                <button class="close-modal-btn" onclick="closeVideoModal()">✕</button>
             </div>
             <div class="video-container">
-                <video id="videoPlayer" controls preload="auto" playsinline webkit-playsinline>
+                <video id="videoPlayer" controls>
                     <source id="videoSource" src="" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
-                <div id="videoModalStatus" class="video-status-overlay" aria-live="polite">
-                    <div class="spinner"></div>
-                    <span id="videoModalStatusText">Loading video…</span>
-                </div>
             </div>
             <div class="video-modal-buttons">
                 <button class="video-play-btn" onclick="playVideoNow()">▶️ Play Now</button>
@@ -7995,15 +7779,11 @@
                 <h3>🎬 Video Player</h3>
             </div>
             <div class="video-container">
-                <video id="galleryVideoPlayer" controls preload="auto" playsinline webkit-playsinline>
+                <video id="galleryVideoPlayer" controls>
                     <source id="galleryVideoSource" src="" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
                 <iframe id="galleryDriveFrame" src="" style="display:none; width:100%; height:100%; border:0;" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-                <div id="galleryVideoModalStatus" class="video-status-overlay" aria-live="polite">
-                    <div class="spinner"></div>
-                    <span id="galleryVideoModalStatusText">Loading video…</span>
-                </div>
             </div>
             <div class="video-modal-buttons">
                 <button class="video-play-btn" onclick="playGalleryVideoNow()">▶️ Play Now</button>
@@ -8238,4 +8018,64 @@
                 document.querySelector('.sidebar').classList.toggle('mobile-open');
             }
         </script>
+    <script>
+        // Diagnostic + auto-fallback for video load failures.
+        // Does not modify any existing function, modal, or CSS — purely additive listeners.
+        (function () {
+            function attachVideoDiagnostics(videoId, sourceId) {
+                const videoEl = document.getElementById(videoId);
+                const sourceEl = document.getElementById(sourceId);
+                if (!videoEl || !sourceEl) return;
+
+                let triedCaseFallback = false;
+
+                function showDiagnostic(msg) {
+                    let diag = videoEl.parentElement.querySelector('.video-diag-msg');
+                    if (!diag) {
+                        diag = document.createElement('div');
+                        diag.className = 'video-diag-msg';
+                        diag.style.color = '#fca5a5';
+                        diag.style.fontSize = '0.8rem';
+                        diag.style.marginTop = '8px';
+                        diag.style.textAlign = 'center';
+                        videoEl.parentElement.appendChild(diag);
+                    }
+                    diag.textContent = msg;
+                }
+
+                videoEl.addEventListener('error', function () {
+                    const currentSrc = sourceEl.getAttribute('src') || '';
+                    if (!currentSrc) return;
+
+                    // Try the opposite folder casing once (common GitHub Pages 404 cause)
+                    if (!triedCaseFallback) {
+                        let altSrc = null;
+                        if (currentSrc.indexOf('Videos/') !== -1) {
+                            altSrc = currentSrc.replace('Videos/', 'videos/');
+                        } else if (currentSrc.indexOf('videos/') !== -1) {
+                            altSrc = currentSrc.replace('videos/', 'Videos/');
+                        }
+                        if (altSrc) {
+                            triedCaseFallback = true;
+                            sourceEl.setAttribute('src', altSrc);
+                            videoEl.load();
+                            return;
+                        }
+                    }
+
+                    // Reveal the actual HTTP failure reason so it shows up next time this is checked
+                    fetch(sourceEl.src, { method: 'GET' })
+                        .then(function (resp) {
+                            showDiagnostic('Video fetch failed: HTTP ' + resp.status + ' — ' + sourceEl.src);
+                        })
+                        .catch(function (err) {
+                            showDiagnostic('Video fetch failed: ' + err.message + ' — ' + sourceEl.src);
+                        });
+                }, true);
+            }
+
+            attachVideoDiagnostics('videoPlayer', 'videoSource');
+            attachVideoDiagnostics('galleryVideoPlayer', 'galleryVideoSource');
+        })();
+    </script>
 </body>
