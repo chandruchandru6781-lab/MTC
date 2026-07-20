@@ -5858,6 +5858,88 @@
             });
         }
 
+        function renderQuestionImageWithRetry(container, imageSrc) {
+            container.innerHTML = '';
+
+            const wrapper = document.createElement('div');
+            wrapper.style.display = 'inline-block';
+            wrapper.style.textAlign = 'center';
+
+            const img = document.createElement('img');
+            img.alt = 'Question Image';
+            img.style.maxWidth = '400px';
+            img.style.maxHeight = '300px';
+            img.style.borderRadius = '8px';
+            img.style.display = 'block';
+
+            let autoRetries = 0;
+            const maxAutoRetries = 2;
+
+            function loadImage(bustCache) {
+                const src = bustCache ? (imageSrc + (imageSrc.indexOf('?') === -1 ? '?' : '&') + 'retry=' + Date.now()) : imageSrc;
+                img.src = src;
+            }
+
+            function showRefreshButton() {
+                let refreshBtn = wrapper.querySelector('.question-image-refresh-btn');
+                if (refreshBtn) return;
+                refreshBtn = document.createElement('button');
+                refreshBtn.className = 'question-image-refresh-btn';
+                refreshBtn.type = 'button';
+                refreshBtn.textContent = '🔄 Reload Image';
+                refreshBtn.style.display = 'block';
+                refreshBtn.style.margin = '10px auto 0';
+                refreshBtn.style.padding = '8px 16px';
+                refreshBtn.style.borderRadius = '20px';
+                refreshBtn.style.border = 'none';
+                refreshBtn.style.background = '#6d28d9';
+                refreshBtn.style.color = '#fff';
+                refreshBtn.style.fontWeight = 'bold';
+                refreshBtn.style.cursor = 'pointer';
+                refreshBtn.addEventListener('click', function () {
+                    refreshBtn.textContent = '🔄 Reloading...';
+                    autoRetries = 0;
+                    loadImage(true);
+                });
+                wrapper.appendChild(refreshBtn);
+            }
+
+            img.onerror = function () {
+                if (autoRetries < maxAutoRetries) {
+                    autoRetries++;
+                    setTimeout(function () { loadImage(true); }, 800 * autoRetries);
+                } else {
+                    showRefreshButton();
+                }
+            };
+
+            img.onload = function () {
+                const refreshBtn = wrapper.querySelector('.question-image-refresh-btn');
+                if (refreshBtn) refreshBtn.remove();
+            };
+
+            wrapper.appendChild(img);
+            container.appendChild(wrapper);
+            loadImage(false);
+
+            // Always-available manual refresh, in case an image loads slowly/wrongly without technically erroring
+            const manualRefresh = document.createElement('button');
+            manualRefresh.type = 'button';
+            manualRefresh.textContent = '🔄';
+            manualRefresh.title = 'Reload image';
+            manualRefresh.style.marginLeft = '8px';
+            manualRefresh.style.border = 'none';
+            manualRefresh.style.background = 'transparent';
+            manualRefresh.style.cursor = 'pointer';
+            manualRefresh.style.fontSize = '1.1rem';
+            manualRefresh.style.verticalAlign = 'middle';
+            manualRefresh.addEventListener('click', function () {
+                autoRetries = 0;
+                loadImage(true);
+            });
+            wrapper.appendChild(manualRefresh);
+        }
+
         function renderQuestion() {
             if (currentQuestionIndex >= totalQuestionsToAsk) {
                 showQuizEnd();
@@ -5886,7 +5968,7 @@
             }
             
             if (question.image) {
-                imageContainer.innerHTML = `<img src="${question.image}" alt="Question Image" style="max-width: 400px; max-height: 300px; border-radius: 8px;">`;
+                renderQuestionImageWithRetry(imageContainer, question.image);
             } else {
                 imageContainer.innerHTML = '';
             }
