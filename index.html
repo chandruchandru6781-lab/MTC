@@ -5880,64 +5880,60 @@
                 img.src = src;
             }
 
-            function showRefreshButton() {
-                let refreshBtn = wrapper.querySelector('.question-image-refresh-btn');
-                if (refreshBtn) return;
-                refreshBtn = document.createElement('button');
-                refreshBtn.className = 'question-image-refresh-btn';
-                refreshBtn.type = 'button';
-                refreshBtn.textContent = '🔄 Reload Image';
-                refreshBtn.style.display = 'block';
-                refreshBtn.style.margin = '10px auto 0';
-                refreshBtn.style.padding = '8px 16px';
-                refreshBtn.style.borderRadius = '20px';
-                refreshBtn.style.border = 'none';
-                refreshBtn.style.background = '#6d28d9';
-                refreshBtn.style.color = '#fff';
-                refreshBtn.style.fontWeight = 'bold';
-                refreshBtn.style.cursor = 'pointer';
-                refreshBtn.addEventListener('click', function () {
-                    refreshBtn.textContent = '🔄 Reloading...';
-                    autoRetries = 0;
-                    loadImage(true);
-                });
-                wrapper.appendChild(refreshBtn);
+            // Single, always-visible reload control — present the instant the question loads,
+            // regardless of whether the image succeeds, fails, or is still loading.
+            // This does not depend on the image element mounting or erroring correctly.
+            const reloadBtn = document.createElement('button');
+            reloadBtn.type = 'button';
+            reloadBtn.className = 'question-image-reload-btn';
+            reloadBtn.textContent = '🔄 Reload Symbol';
+            reloadBtn.title = 'Reload the traffic symbol image';
+            reloadBtn.style.display = 'block';
+            reloadBtn.style.margin = '10px auto 0';
+            reloadBtn.style.padding = '6px 14px';
+            reloadBtn.style.borderRadius = '20px';
+            reloadBtn.style.border = '1px solid #6d28d9';
+            reloadBtn.style.background = '#fff';
+            reloadBtn.style.color = '#6d28d9';
+            reloadBtn.style.fontWeight = 'bold';
+            reloadBtn.style.fontSize = '0.85rem';
+            reloadBtn.style.cursor = 'pointer';
+
+            function markFailed() {
+                reloadBtn.textContent = '⚠️ Symbol failed to load — Tap to Reload';
+                reloadBtn.style.background = '#dc2626';
+                reloadBtn.style.color = '#fff';
+                reloadBtn.style.borderColor = '#dc2626';
             }
+
+            function markOk() {
+                reloadBtn.textContent = '🔄 Reload Symbol';
+                reloadBtn.style.background = '#fff';
+                reloadBtn.style.color = '#6d28d9';
+                reloadBtn.style.borderColor = '#6d28d9';
+            }
+
+            reloadBtn.addEventListener('click', function () {
+                autoRetries = 0;
+                reloadBtn.textContent = '🔄 Reloading...';
+                loadImage(true);
+            });
 
             img.onerror = function () {
                 if (autoRetries < maxAutoRetries) {
                     autoRetries++;
                     setTimeout(function () { loadImage(true); }, 800 * autoRetries);
                 } else {
-                    showRefreshButton();
+                    markFailed();
                 }
             };
 
-            img.onload = function () {
-                const refreshBtn = wrapper.querySelector('.question-image-refresh-btn');
-                if (refreshBtn) refreshBtn.remove();
-            };
+            img.onload = markOk;
 
             wrapper.appendChild(img);
+            wrapper.appendChild(reloadBtn);
             container.appendChild(wrapper);
             loadImage(false);
-
-            // Always-available manual refresh, in case an image loads slowly/wrongly without technically erroring
-            const manualRefresh = document.createElement('button');
-            manualRefresh.type = 'button';
-            manualRefresh.textContent = '🔄';
-            manualRefresh.title = 'Reload image';
-            manualRefresh.style.marginLeft = '8px';
-            manualRefresh.style.border = 'none';
-            manualRefresh.style.background = 'transparent';
-            manualRefresh.style.cursor = 'pointer';
-            manualRefresh.style.fontSize = '1.1rem';
-            manualRefresh.style.verticalAlign = 'middle';
-            manualRefresh.addEventListener('click', function () {
-                autoRetries = 0;
-                loadImage(true);
-            });
-            wrapper.appendChild(manualRefresh);
         }
 
         function renderQuestion() {
