@@ -4842,6 +4842,30 @@
                 console.log('✓ Restored missing mandatory/new quiz questions');
             }
         }
+
+        function removeDuplicateQuestions() {
+            const seenQuestions = new Set();
+            const uniqueQuizData = [];
+
+            quizData.forEach((question) => {
+                const key = question && question.question ? question.question.trim() : null;
+                if (!key || !seenQuestions.has(key)) {
+                    if (key) {
+                        seenQuestions.add(key);
+                    }
+                    uniqueQuizData.push(question);
+                } else {
+                    console.log('✓ Removed duplicate quiz question:', key);
+                }
+            });
+
+            if (uniqueQuizData.length !== quizData.length) {
+                quizData = uniqueQuizData;
+                saveQuesToIndexedDB();
+                saveQuesToLocalStorage();
+                console.log('✓ Duplicate quiz questions cleaned from storage');
+            }
+        }
         
         // Function to clear all storage (for debugging/reset)
         function clearQuizDataStorage() {
@@ -5530,7 +5554,8 @@
             'Videos/TNSTC Con Helped grandma.mp4',
             'Videos/TNSTC Dvr & con Helping girl.mp4',
             'Videos/Womens day.mp4',
-            'Videos/Conductor Respects Passenger.mp4'
+            'Videos/Conductor Respects Passenger.mp4',
+            'Videos/Conductor Driver Helped Passenger.mp4'
         ];
         let lastVideoCheckCount = 0;
         let videoCheckEnabled = true;
@@ -7683,6 +7708,7 @@
                 
                 if (savedQuestions && Array.isArray(savedQuestions)) {
                     quizData = savedQuestions;
+                    removeDuplicateQuestions();
                     ensureMandatoryQuestionsExist();
                     console.log('✓ Loaded ' + quizData.length + ' questions from persistent storage');
                 } else {
@@ -7695,6 +7721,7 @@
                 const savedQuestions = loadQuesFromLocalStorage();
                 if (savedQuestions) {
                     quizData = savedQuestions;
+                    removeDuplicateQuestions();
                     console.log('✓ Loaded ' + quizData.length + ' questions from localStorage');
                 } else {
                     console.log('ℹ Using default questions');
