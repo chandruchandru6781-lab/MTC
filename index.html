@@ -7642,32 +7642,20 @@
 
         async function loadAvailableFiles() {
             try {
-                // List of actual files in the file/ folder
-                // This is generated automatically - add files to file/ folder to show them
-                const files = [
-                    { name: 'BNS-Section-105.pdf', path: 'file/BNS-Section-105.pdf' },
-                    { name: 'BNS-Section-106(1).pdf', path: 'file/BNS-Section-106(1).pdf' },
-                    { name: 'BNS-Section-106(2).pdf', path: 'file/BNS-Section-106(2).pdf' },
-                    { name: 'BNS-Section-108.pdf', path: 'file/BNS-Section-108.pdf' },
-                    { name: 'BNS-Section-125a.pdf', path: 'file/BNS-Section-125a.pdf' },
-                    { name: 'BNS-Section-125b.pdf', path: 'file/BNS-Section-125b.pdf' },
-                    { name: 'BNS-Section-202.pdf', path: 'file/BNS-Section-202.pdf' },
-                    { name: 'BNS-Section-221.pdf', path: 'file/BNS-Section-221.pdf' },
-                    { name: 'BNS-Section-226.pdf', path: 'file/BNS-Section-226.pdf' },
-                    { name: 'BNS-Section-281.pdf', path: 'file/BNS-Section-281.pdf' },
-                    { name: 'Final-09062026.pdf', path: 'file/Final-09062026.pdf' },
-                    { name: 'MV-Act-Section-134.pdf', path: 'file/MV-Act-Section-134.pdf' },
-                    { name: 'MV-Act-Section-134b.pdf', path: 'file/MV-Act-Section-134b.pdf' },
-                    { name: 'MV-Act-Section-179.pdf', path: 'file/MV-Act-Section-179.pdf' },
-                    { name: 'MV-Act-Section-184.pdf', path: 'file/MV-Act-Section-184.pdf' },
-                    { name: 'MV-Act-Section-185.pdf', path: 'file/MV-Act-Section-185.pdf' },
-                    { name: 'MV-Act-Section-194E.pdf', path: 'file/MV-Act-Section-194E.pdf' },
-                    { name: 'MV-Act-Section-204.pdf', path: 'file/MV-Act-Section-204.pdf' },
-                    { name: 'POCSO-Act.pdf', path: 'file/POCSO-Act.pdf' }
-                ];
-                
-                return files;
-                
+                const response = await fetch('list-files.php');
+                if (!response.ok) {
+                    throw new Error('Failed to load file list');
+                }
+
+                const files = await response.json();
+                if (!Array.isArray(files)) {
+                    return [];
+                }
+
+                return files.map((file) => ({
+                    name: file.name,
+                    path: file.path
+                }));
             } catch (err) {
                 console.error('Error loading files:', err);
                 return [];
