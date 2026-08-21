@@ -4667,7 +4667,7 @@
                     console.warn('⚠️ IndexedDB open failed, will use localStorage only');
                     reject(request.error);
                 };
-                
+
                 request.onsuccess = function() {
                     db = request.result;
                     console.log('✓ IndexedDB initialized successfully');
@@ -5529,6 +5529,20 @@
             }
         ];
 
+        const defaultTrafficSymbolImages = new Map(
+            quizData
+                .filter(question => question.image)
+                .map(question => [question.question, question.image])
+        );
+
+        function restoreTrafficSymbolImages() {
+            quizData.forEach(question => {
+                if (!question.image && defaultTrafficSymbolImages.has(question.question)) {
+                    question.image = defaultTrafficSymbolImages.get(question.question);
+                }
+            });
+        }
+
         // State Variables
         let selectedTeamCount = null;
         let teamNames = [];
@@ -5989,9 +6003,11 @@
             }
             
             if (question.image) {
+                imageContainer.style.display = 'block';
                 renderQuestionImageWithRetry(imageContainer, question.image);
             } else {
                 imageContainer.innerHTML = '';
+                imageContainer.style.display = 'none';
             }
 
             const progress = ((currentQuestionIndex) / totalQuestionsToAsk) * 100;
@@ -7727,6 +7743,7 @@
                 
                 if (savedQuestions && Array.isArray(savedQuestions)) {
                     quizData = savedQuestions;
+                    restoreTrafficSymbolImages();
                     removeDuplicateQuestions();
                     ensureMandatoryQuestionsExist();
                     console.log('✓ Loaded ' + quizData.length + ' questions from persistent storage');
@@ -7740,6 +7757,7 @@
                 const savedQuestions = loadQuesFromLocalStorage();
                 if (savedQuestions) {
                     quizData = savedQuestions;
+                    restoreTrafficSymbolImages();
                     removeDuplicateQuestions();
                     console.log('✓ Loaded ' + quizData.length + ' questions from localStorage');
                 } else {
