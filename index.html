@@ -6768,7 +6768,6 @@
             styleEl = document.createElement('style');
             styleEl.id = 'skin-theme-style';
             styleEl.textContent = `
-                .setup-header { background: ${gradient} !important; }
                 .start-btn { background: ${gradient} !important; }
                 .settings-btn { background: ${gradient} !important; }
                 .settings-modal-header { background: ${gradient} !important; }
@@ -6911,16 +6910,7 @@
         }
 
         function applySelectedThemeFromSettings() {
-            // Remove all theme classes
-            themes.forEach(theme => {
-                document.body.classList.remove('theme-' + theme.id);
-            });
-
-            // Add selected theme class
-            document.body.classList.add('theme-' + selectedThemeId);
-
-            // Save to localStorage
-            localStorage.setItem('selectedTheme', selectedThemeId);
+            applyTheme(selectedThemeId);
 
             // Show confirmation message
             const messageModal = document.getElementById('messageModal');
@@ -6934,32 +6924,39 @@
         }
 
         function applySelectedTheme() {
-            // Remove all theme classes
-            themes.forEach(theme => {
-                document.body.classList.remove('theme-' + theme.id);
-            });
-
-            // Add selected theme class
-            document.body.classList.add('theme-' + selectedThemeId);
-
-            // Save to localStorage
-            localStorage.setItem('selectedTheme', selectedThemeId);
-
-            // Close modal
+            applyTheme(selectedThemeId);
             closeThemeModal();
         }
 
         function applyTheme(themeId) {
-            // Remove all theme classes
+            const themeExists = themes.some(theme => theme.id === themeId);
+            const validThemeId = themeExists ? themeId : 'default';
+            const selectedTheme = themes.find(theme => theme.id === validThemeId);
+
             themes.forEach(theme => {
                 document.body.classList.remove('theme-' + theme.id);
             });
 
-            // Add selected theme class
-            document.body.classList.add('theme-' + themeId);
+            document.body.classList.add('theme-' + validThemeId);
+            document.body.dataset.theme = validThemeId;
+            selectedThemeId = validThemeId;
+            localStorage.setItem('selectedTheme', validThemeId);
 
-            // Save to localStorage
-            localStorage.setItem('selectedTheme', themeId);
+            let styleEl = document.getElementById('active-theme-style');
+            if (styleEl) styleEl.remove();
+            styleEl = document.createElement('style');
+            styleEl.id = 'active-theme-style';
+            styleEl.textContent = `
+                #setupScreen,
+                #quizScreen {
+                    background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.78)), ${selectedTheme.gradient} !important;
+                }
+                .setup-header,
+                .quiz-header {
+                    background: ${selectedTheme.gradient} !important;
+                }
+            `;
+            document.head.appendChild(styleEl);
         }
 
         function openThemeModal() {
